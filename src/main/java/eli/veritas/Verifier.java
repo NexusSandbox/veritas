@@ -1,4 +1,4 @@
-package eli.veritas.verifier;
+package eli.veritas;
 
 import java.text.MessageFormat;
 import java.util.Collection;
