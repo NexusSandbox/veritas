@@ -12,3 +12,6 @@ buildNumber.properties
 !/.mvn/wrapper/maven-wrapper.jar
 /.classpath
 /.project
+/src/main/main.iml
+/veritas.iml
+/.idea/

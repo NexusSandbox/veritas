@@ -1,2 +1,2 @@
-# veritas
-Library for code verifiers and asserters.
+# Veritas
+Library for Composite Exceptions and code verifiers.
