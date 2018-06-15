@@ -3,6 +3,9 @@ package eli.veritas;
 import eli.veritas.exception.CompositeException;
 
 import java.text.MessageFormat;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -84,7 +87,7 @@ public class Verifier
         {
             if (Verifier.Strings.isBlank.negate().test(actual))
             {
-                messages.add(MessageFormat.format(Strings.formatBlank, className, fieldLabel));
+                messages.add(MessageFormat.format(Strings.formatBlank, className, fieldLabel, actual));
                 if (value != null)
                 {
                     values.add(value);
@@ -248,7 +251,7 @@ public class Verifier
         {
             if (Verifier.Strings.isEmpty.negate().test(actual))
             {
-                messages.add(MessageFormat.format(Strings.formatEmpty, className, fieldLabel));
+                messages.add(MessageFormat.format(Strings.formatEmpty, className, fieldLabel, actual));
                 if (value != null)
                 {
                     values.add(value);
@@ -299,250 +302,8 @@ public class Verifier
         }
 
         /**
-         * Asserts that <var>actual</var> input {@link Equality#isEqualBoolean is equal to} the <var>expected</var> input.
-         * <blockquote>{@value Equality#formatEqual}</blockquote>
-         *
-         * @param fieldLabel The field's name to display as part of the diagnostic message. (Cannot be blank)
-         * @param actual     The <var>actual</var> input to assert against the expectations.
-         * @param expected   The <var>expected</var> value to compare against.
-         *
-         * @return This non-null {@link Checker}.
-         */
-        public Checker<S> ifEqual(final String fieldLabel, final boolean actual, final boolean expected)
-        {
-            return ifEqual(fieldLabel, actual, expected, null);
-        }
-
-        /**
-         * Asserts that <var>actual</var> input {@link Equality#isEqualBoolean is equal to} the <var>expected</var> input.
-         * <blockquote>{@value Equality#formatEqual}</blockquote>
-         *
-         * @param fieldLabel The field's name to display as part of the diagnostic message. (Cannot be blank)
-         * @param actual     The <var>actual</var> input to assert against the expectations.
-         * @param expected   The <var>expected</var> value to compare against.
-         * @param value      Additional indicator value that corresponds to the potential failure. (May be null)
-         *
-         * @return This non-null {@link Checker}.
-         */
-        public Checker<S> ifEqual(final String fieldLabel, final boolean actual, final boolean expected, final S value)
-        {
-            if (Equality.isEqualBoolean.negate().test(actual, expected))
-            {
-                messages.add(MessageFormat.format(Equality.formatEqual, className, fieldLabel, actual, expected));
-                if (value != null)
-                {
-                    values.add(value);
-                }
-            }
-
-            return this;
-        }
-
-        /**
-         * Asserts that <var>actual</var> input {@link Equality#isEqualCharacter is equal to} the <var>expected</var> input.
-         * <blockquote>{@value Equality#formatEqual}</blockquote>
-         *
-         * @param fieldLabel The field's name to display as part of the diagnostic message. (Cannot be blank)
-         * @param actual     The <var>actual</var> input to assert against the expectations.
-         * @param expected   The <var>expected</var> value to compare against.
-         *
-         * @return This non-null {@link Checker}.
-         */
-        public Checker<S> ifEqual(final String fieldLabel, final char actual, final char expected)
-        {
-            return ifEqual(fieldLabel, actual, expected, null);
-        }
-
-        /**
-         * Asserts that <var>actual</var> input {@link Equality#isEqualCharacter is equal to} the <var>expected</var> input.
-         * <blockquote>{@value Equality#formatEqual}</blockquote>
-         *
-         * @param fieldLabel The field's name to display as part of the diagnostic message. (Cannot be blank)
-         * @param actual     The <var>actual</var> input to assert against the expectations.
-         * @param expected   The <var>expected</var> value to compare against.
-         * @param value      Additional indicator value that corresponds to the potential failure. (May be null)
-         *
-         * @return This non-null {@link Checker}.
-         */
-        public Checker<S> ifEqual(final String fieldLabel, final char actual, final char expected, final S value)
-        {
-            if (Equality.isEqualCharacter.negate().test(actual, expected))
-            {
-                messages.add(MessageFormat.format(Equality.formatEqual, className, fieldLabel, actual, expected));
-                if (value != null)
-                {
-                    values.add(value);
-                }
-            }
-
-            return this;
-        }
-
-        /**
-         * Asserts that <var>actual</var> input {@link Equality#isEqualInteger is equal to} the <var>expected</var> input.
-         * <blockquote>{@value Equality#formatEqual}</blockquote>
-         *
-         * @param fieldLabel The field's name to display as part of the diagnostic message. (Cannot be blank)
-         * @param actual     The <var>actual</var> input to assert against the expectations.
-         * @param expected   The <var>expected</var> value to compare against.
-         *
-         * @return This non-null {@link Checker}.
-         */
-        public Checker<S> ifEqual(final String fieldLabel, final int actual, final int expected)
-        {
-            return ifEqual(fieldLabel, actual, expected, null);
-        }
-
-        /**
-         * Asserts that <var>actual</var> input {@link Equality#isEqualInteger is equal to} the <var>expected</var> input.
-         * <blockquote>{@value Equality#formatEqual}</blockquote>
-         *
-         * @param fieldLabel The field's name to display as part of the diagnostic message. (Cannot be blank)
-         * @param actual     The <var>actual</var> input to assert against the expectations.
-         * @param expected   The <var>expected</var> value to compare against.
-         * @param value      Additional indicator value that corresponds to the potential failure. (May be null)
-         *
-         * @return This non-null {@link Checker}.
-         */
-        public Checker<S> ifEqual(final String fieldLabel, final int actual, final int expected, final S value)
-        {
-            if (Equality.isEqualInteger.negate().test(actual, expected))
-            {
-                messages.add(MessageFormat.format(Equality.formatEqual, className, fieldLabel, actual, expected));
-                if (value != null)
-                {
-                    values.add(value);
-                }
-            }
-
-            return this;
-        }
-
-        /**
-         * Asserts that <var>actual</var> input {@link Equality#isEqualShort is equal to} the <var>expected</var> input.
-         * <blockquote>{@value Equality#formatEqual}</blockquote>
-         *
-         * @param fieldLabel The field's name to display as part of the diagnostic message. (Cannot be blank)
-         * @param actual     The <var>actual</var> input to assert against the expectations.
-         * @param expected   The <var>expected</var> value to compare against.
-         *
-         * @return This non-null {@link Checker}.
-         */
-        public Checker<S> ifEqual(final String fieldLabel, final short actual, final short expected)
-        {
-            return ifEqual(fieldLabel, actual, expected, null);
-        }
-
-        /**
-         * Asserts that <var>actual</var> input {@link Equality#isEqualShort is equal to} the <var>expected</var> input.
-         * <blockquote>{@value Equality#formatEqual}</blockquote>
-         *
-         * @param fieldLabel The field's name to display as part of the diagnostic message. (Cannot be blank)
-         * @param actual     The <var>actual</var> input to assert against the expectations.
-         * @param expected   The <var>expected</var> value to compare against.
-         * @param value      Additional indicator value that corresponds to the potential failure. (May be null)
-         *
-         * @return This non-null {@link Checker}.
-         */
-        public Checker<S> ifEqual(final String fieldLabel, final short actual, final short expected, final S value)
-        {
-            if (Equality.isEqualShort.negate().test(actual, expected))
-            {
-                messages.add(MessageFormat.format(Equality.formatEqual, className, fieldLabel, actual, expected));
-                if (value != null)
-                {
-                    values.add(value);
-                }
-            }
-
-            return this;
-        }
-
-        /**
-         * Asserts that <var>actual</var> input {@link Equality#isEqualLong is equal to} the <var>expected</var> input.
-         * <blockquote>{@value Equality#formatEqual}</blockquote>
-         *
-         * @param fieldLabel The field's name to display as part of the diagnostic message. (Cannot be blank)
-         * @param actual     The <var>actual</var> input to assert against the expectations.
-         * @param expected   The <var>expected</var> value to compare against.
-         *
-         * @return This non-null {@link Checker}.
-         */
-        public Checker<S> ifEqual(final String fieldLabel, final long actual, final long expected)
-        {
-            return ifEqual(fieldLabel, actual, expected, null);
-        }
-
-        /**
-         * Asserts that <var>actual</var> input {@link Equality#isEqualLong is equal to} the <var>expected</var> input.
-         * <blockquote>{@value Equality#formatEqual}</blockquote>
-         *
-         * @param fieldLabel The field's name to display as part of the diagnostic message. (Cannot be blank)
-         * @param actual     The <var>actual</var> input to assert against the expectations.
-         * @param expected   The <var>expected</var> value to compare against.
-         * @param value      Additional indicator value that corresponds to the potential failure. (May be null)
-         *
-         * @return This non-null {@link Checker}.
-         */
-        public Checker<S> ifEqual(final String fieldLabel, final long actual, final long expected, final S value)
-        {
-            if (Equality.isEqualLong.negate().test(actual, expected))
-            {
-                messages.add(MessageFormat.format(Equality.formatEqual, className, fieldLabel, actual, expected));
-                if (value != null)
-                {
-                    values.add(value);
-                }
-            }
-
-            return this;
-        }
-
-        /**
-         * Asserts that <var>actual</var> input {@link Equality#isEqualDouble is equal to} the <var>expected</var> input.
-         * <blockquote>{@value Equality#formatEqualWithError}</blockquote>
-         *
-         * @param fieldLabel The field's name to display as part of the diagnostic message. (Cannot be blank)
-         * @param actual     The <var>actual</var> input to assert against the expectations.
-         * @param expected   The <var>expected</var> value to compare against.
-         *
-         * @return This non-null {@link Checker}.
-         */
-        public Checker<S> ifEqual(final String fieldLabel, final double actual, final double expected, final double epsilon)
-        {
-            return ifEqual(fieldLabel, actual, expected, epsilon, null);
-        }
-
-        /**
-         * Asserts that <var>actual</var> input {@link Equality#isEqualDouble is equal to} the <var>expected</var> input.
-         * <blockquote>{@value Equality#formatEqualWithError}</blockquote>
-         *
-         * @param fieldLabel The field's name to display as part of the diagnostic message. (Cannot be blank)
-         * @param actual     The <var>actual</var> input to assert against the expectations.
-         * @param expected   The <var>expected</var> value to compare against.
-         * @param value      Additional indicator value that corresponds to the potential failure. (May be null)
-         *
-         * @return This non-null {@link Checker}.
-         */
-        public Checker<S> ifEqual(final String fieldLabel, final double actual, final double expected, final double epsilon, final S value)
-        {
-            if (Equality.isEqualDouble(actual, expected, epsilon))
-            {
-                messages.add(MessageFormat.format(Equality.formatEqualWithError, className, fieldLabel, actual, expected, epsilon));
-                if (value != null)
-                {
-                    values.add(value);
-                }
-            }
-
-            return this;
-        }
-
-        /**
-         * Asserts that <var>actual</var> input {@link Equality#isEqualStringCaseSensitive is equal to} the <var>expected</var> input if
-         * <var>caseSensitive</var> is true, otherwise asserts that <var>actual</var> input {@link Equality#isEqualStringCaseInsensitive is equal to}
-         * the <var>expected</var> input.
-         * <blockquote>{@value Equality#formatEqual}</blockquote>
+         * Asserts that <var>actual</var> input {@link Equality#isEqualString is equal to} the <var>expected</var> input.
+         * <blockquote>{@value Equality#formatEqualString}</blockquote>
          *
          * @param fieldLabel The field's name to display as part of the diagnostic message. (Cannot be blank)
          * @param actual     The <var>actual</var> input to assert against the expectations.
@@ -556,10 +317,8 @@ public class Verifier
         }
 
         /**
-         * Asserts that <var>actual</var> input {@link Equality#isEqualStringCaseSensitive is equal to} the <var>expected</var> input if
-         * <var>caseSensitive</var> is true, otherwise asserts that <var>actual</var> input {@link Equality#isEqualStringCaseInsensitive is equal to}
-         * the <var>expected</var> input.
-         * <blockquote>{@value Equality#formatEqual}</blockquote>
+         * Asserts that <var>actual</var> input {@link Equality#isEqualString is equal to} the <var>expected</var> input.
+         * <blockquote>{@value Equality#formatEqualString}</blockquote>
          *
          * @param fieldLabel The field's name to display as part of the diagnostic message. (Cannot be blank)
          * @param actual     The <var>actual</var> input to assert against the expectations.
@@ -570,12 +329,9 @@ public class Verifier
          */
         public Checker<S> ifEqual(final String fieldLabel, final String actual, final String expected, final boolean caseSensitive, final S value)
         {
-            if ((caseSensitive && Equality.isEqualStringCaseSensitive.negate().test(actual, expected)) || (!caseSensitive
-                                                                                                           && Equality.isEqualStringCaseInsensitive.negate()
-                                                                                                                                                   .test(actual,
-                                                                                                                                                         expected)))
+            if (!Equality.isEqualString(actual, expected, caseSensitive))
             {
-                messages.add(MessageFormat.format(Equality.formatEqual, className, fieldLabel, actual, expected));
+                messages.add(MessageFormat.format(Equality.formatEqualString, className, fieldLabel, actual, expected));
                 if (value != null)
                 {
                     values.add(value);
@@ -666,6 +422,135 @@ public class Verifier
         }
 
         /**
+         * Asserts that <var>actual</var> input {@link Equality#isEqualDateWithTolerance(Instant, Instant, long) is equal to} the <var>expected</var>
+         * within the provided <var>tolerance</var>.
+         * <blockquote>{@value Equality#formatEqualWithError}</blockquote>
+         *
+         * @param fieldLabel The field's name to display as part of the diagnostic message. (Cannot be blank)
+         * @param actual     The <var>actual1</var> input to assert against the expectations.
+         * @param expected   The <var>expected</var> value to compare against.
+         * @param tolerance  The allowed tolerance between <var>actual</var> and <var>expected</var> in seconds. (Must be positive)
+         *
+         * @return This non-null {@link Checker}.
+         */
+        public Checker<S> ifEqualDate(final String fieldLabel, final Instant actual, final Instant expected, final long tolerance)
+        {
+            return ifEqualDate(fieldLabel, actual, expected, tolerance, null);
+        }
+
+        /**
+         * Asserts that <var>actual</var> input {@link Equality#isEqualDateWithTolerance(Instant, Instant, long) is equal to} the <var>expected</var>
+         * within the provided <var>tolerance</var>.
+         * <blockquote>{@value Equality#formatEqualWithError}</blockquote>
+         *
+         * @param fieldLabel The field's name to display as part of the diagnostic message. (Cannot be blank)
+         * @param actual     The <var>actual1</var> input to assert against the expectations.
+         * @param expected   The <var>expected</var> value to compare against.
+         * @param tolerance  The allowed tolerance between <var>actual</var> and <var>expected</var> in seconds. (Must be positive)
+         * @param value      Additional indicator value that corresponds to the potential failure. (May be null)
+         *
+         * @return This non-null {@link Checker}.
+         */
+        public Checker<S> ifEqualDate(final String fieldLabel, final Instant actual, final Instant expected, final long tolerance, final S value)
+        {
+            if (!Verifier.Equality.isEqualDateWithTolerance(actual, expected, tolerance))
+            {
+                messages.add(MessageFormat.format(Equality.formatEqualDateWithTolerance, className, fieldLabel, actual, expected, tolerance));
+                if (value != null)
+                {
+                    values.add(value);
+                }
+            }
+
+            return this;
+        }
+
+        /**
+         * Asserts that <var>actual</var> input {@link Equality#isEqualDateWithTolerance(LocalDateTime, LocalDateTime, long) is equal to} the
+         * <var>expected</var> within the provided <var>tolerance</var>.
+         * <blockquote>{@value Equality#formatEqualDateWithTolerance}</blockquote>
+         *
+         * @param fieldLabel The field's name to display as part of the diagnostic message. (Cannot be blank)
+         * @param actual     The <var>actual1</var> input to assert against the expectations.
+         * @param expected   The <var>expected</var> value to compare against.
+         * @param tolerance  The allowed tolerance between <var>actual</var> and <var>expected</var> in seconds. (Must be positive)
+         *
+         * @return This non-null {@link Checker}.
+         */
+        public Checker<S> ifEqualDate(final String fieldLabel, final LocalDateTime actual, final LocalDateTime expected, final long tolerance)
+        {
+            return ifEqualDate(fieldLabel, actual, expected, tolerance, null);
+        }
+
+        /**
+         * Asserts that <var>actual</var> input {@link Equality#isEqualDateWithTolerance(LocalDateTime, LocalDateTime, long) is equal to} the
+         * <var>expected</var> within the provided <var>tolerance</var>.
+         * <blockquote>{@value Equality#formatEqualDateWithTolerance}</blockquote>
+         *
+         * @param fieldLabel The field's name to display as part of the diagnostic message. (Cannot be blank)
+         * @param actual     The <var>actual1</var> input to assert against the expectations.
+         * @param expected   The <var>expected</var> value to compare against.
+         * @param tolerance  The allowed tolerance between <var>actual</var> and <var>expected</var> in seconds. (Must be positive)
+         * @param value      Additional indicator value that corresponds to the potential failure. (May be null)
+         *
+         * @return This non-null {@link Checker}.
+         */
+        public Checker<S> ifEqualDate(final String fieldLabel, final LocalDateTime actual, final LocalDateTime expected, final long tolerance,
+                                      final S value)
+        {
+            if (!Verifier.Equality.isEqualDateWithTolerance(actual, expected, tolerance))
+            {
+                messages.add(MessageFormat.format(Equality.formatEqualDateWithTolerance, className, fieldLabel, actual, expected, tolerance));
+                if (value != null)
+                {
+                    values.add(value);
+                }
+            }
+
+            return this;
+        }
+
+        /**
+         * Asserts that <var>actual</var> input {@link Equality#isEqualWithError is equal to} the <var>expected</var> input.
+         * <blockquote>{@value Equality#formatEqualWithError}</blockquote>
+         *
+         * @param fieldLabel The field's name to display as part of the diagnostic message. (Cannot be blank)
+         * @param actual     The <var>actual</var> input to assert against the expectations.
+         * @param expected   The <var>expected</var> value to compare against.
+         *
+         * @return This non-null {@link Checker}.
+         */
+        public Checker<S> ifEqualWithError(final String fieldLabel, final double actual, final double expected, final double epsilon)
+        {
+            return ifEqualWithError(fieldLabel, actual, expected, epsilon, null);
+        }
+
+        /**
+         * Asserts that <var>actual</var> input {@link Equality#isEqualWithError is equal to} the <var>expected</var> input.
+         * <blockquote>{@value Equality#formatEqualWithError}</blockquote>
+         *
+         * @param fieldLabel The field's name to display as part of the diagnostic message. (Cannot be blank)
+         * @param actual     The <var>actual</var> input to assert against the expectations.
+         * @param expected   The <var>expected</var> value to compare against.
+         * @param value      Additional indicator value that corresponds to the potential failure. (May be null)
+         *
+         * @return This non-null {@link Checker}.
+         */
+        public Checker<S> ifEqualWithError(final String fieldLabel, final double actual, final double expected, final double epsilon, final S value)
+        {
+            if (!Equality.isEqualWithError(actual, expected, epsilon))
+            {
+                messages.add(MessageFormat.format(Equality.formatEqualWithError, className, fieldLabel, actual, expected, epsilon));
+                if (value != null)
+                {
+                    values.add(value);
+                }
+            }
+
+            return this;
+        }
+
+        /**
          * Asserts that <var>actual</var> input {@link Strings#matches matches} the regular expression <var>pattern</var> input.
          * <blockquote>{@value Strings#formatMatches}</blockquote>
          *
@@ -737,7 +622,7 @@ public class Verifier
         {
             if (!Verifier.Collections.matchesAllValues(actual, matcher))
             {
-                messages.add(MessageFormat.format(Collections.formatMatchesAllValues, className, fieldLabel, actual, matcher));
+                messages.add(MessageFormat.format(Collections.formatMatchesAllValues, className, fieldLabel, actual));
                 if (value != null)
                 {
                     values.add(value);
@@ -779,7 +664,7 @@ public class Verifier
         {
             if (!Verifier.Collections.matchesAnyValues(actual, matcher))
             {
-                messages.add(MessageFormat.format(Collections.formatMatchesAnyValues, className, fieldLabel, actual, matcher));
+                messages.add(MessageFormat.format(Collections.formatMatchesAnyValues, className, fieldLabel, actual));
                 if (value != null)
                 {
                     values.add(value);
@@ -821,7 +706,7 @@ public class Verifier
         {
             if (!Verifier.Collections.matchesNoValues(actual, matcher))
             {
-                messages.add(MessageFormat.format(Collections.formatMatchesNoValues, className, fieldLabel, actual, matcher));
+                messages.add(MessageFormat.format(Collections.formatMatchesNoValues, className, fieldLabel, actual));
                 if (value != null)
                 {
                     values.add(value);
@@ -857,7 +742,7 @@ public class Verifier
          */
         public Checker<S> ifNotBlank(final String fieldLabel, final String actual, final S value)
         {
-            if (Verifier.Strings.isBlank.negate().test(actual))
+            if (Verifier.Strings.isBlank.test(actual))
             {
                 messages.add(MessageFormat.format(Strings.formatNotBlank, className, fieldLabel));
                 if (value != null)
@@ -948,250 +833,8 @@ public class Verifier
         }
 
         /**
-         * Asserts that <var>actual</var> input {@link Equality#isEqualBoolean is not equal to} the <var>expected</var> input.
-         * <blockquote>{@value Equality#formatNotEqual}</blockquote>
-         *
-         * @param fieldLabel The field's name to display as part of the diagnostic message. (Cannot be blank)
-         * @param actual     The <var>actual</var> input to assert against the expectations.
-         * @param expected   The <var>expected</var> value to compare against.
-         *
-         * @return This non-null {@link Checker}.
-         */
-        public Checker<S> ifNotEqual(final String fieldLabel, final boolean actual, final boolean expected)
-        {
-            return ifNotEqual(fieldLabel, actual, expected, null);
-        }
-
-        /**
-         * Asserts that <var>actual</var> input {@link Equality#isEqualBoolean is not equal to} the <var>expected</var> input.
-         * <blockquote>{@value Equality#formatNotEqual}</blockquote>
-         *
-         * @param fieldLabel The field's name to display as part of the diagnostic message. (Cannot be blank)
-         * @param actual     The <var>actual</var> input to assert against the expectations.
-         * @param expected   The <var>expected</var> value to compare against.
-         * @param value      Additional indicator value that corresponds to the potential failure. (May be null)
-         *
-         * @return This non-null {@link Checker}.
-         */
-        public Checker<S> ifNotEqual(final String fieldLabel, final boolean actual, final boolean expected, final S value)
-        {
-            if (Equality.isEqualBoolean.test(actual, expected))
-            {
-                messages.add(MessageFormat.format(Equality.formatNotEqual, className, fieldLabel, actual, expected));
-                if (value != null)
-                {
-                    values.add(value);
-                }
-            }
-
-            return this;
-        }
-
-        /**
-         * Asserts that <var>actual</var> input {@link Equality#isEqualCharacter is not equal to} the <var>expected</var> input.
-         * <blockquote>{@value Equality#formatNotEqual}</blockquote>
-         *
-         * @param fieldLabel The field's name to display as part of the diagnostic message. (Cannot be blank)
-         * @param actual     The <var>actual</var> input to assert against the expectations.
-         * @param expected   The <var>expected</var> value to compare against.
-         *
-         * @return This non-null {@link Checker}.
-         */
-        public Checker<S> ifNotEqual(final String fieldLabel, final char actual, final char expected)
-        {
-            return ifNotEqual(fieldLabel, actual, expected, null);
-        }
-
-        /**
-         * Asserts that <var>actual</var> input {@link Equality#isEqualCharacter is not equal to} the <var>expected</var> input.
-         * <blockquote>{@value Equality#formatNotEqual}</blockquote>
-         *
-         * @param fieldLabel The field's name to display as part of the diagnostic message. (Cannot be blank)
-         * @param actual     The <var>actual</var> input to assert against the expectations.
-         * @param expected   The <var>expected</var> value to compare against.
-         * @param value      Additional indicator value that corresponds to the potential failure. (May be null)
-         *
-         * @return This non-null {@link Checker}.
-         */
-        public Checker<S> ifNotEqual(final String fieldLabel, final char actual, final char expected, final S value)
-        {
-            if (Equality.isEqualCharacter.test(actual, expected))
-            {
-                messages.add(MessageFormat.format(Equality.formatNotEqual, className, fieldLabel, actual, expected));
-                if (value != null)
-                {
-                    values.add(value);
-                }
-            }
-
-            return this;
-        }
-
-        /**
-         * Asserts that <var>actual</var> input {@link Equality#isEqualInteger is not equal to} the <var>expected</var> input.
-         * <blockquote>{@value Equality#formatNotEqual}</blockquote>
-         *
-         * @param fieldLabel The field's name to display as part of the diagnostic message. (Cannot be blank)
-         * @param actual     The <var>actual</var> input to assert against the expectations.
-         * @param expected   The <var>expected</var> value to compare against.
-         *
-         * @return This non-null {@link Checker}.
-         */
-        public Checker<S> ifNotEqual(final String fieldLabel, final int actual, final int expected)
-        {
-            return ifNotEqual(fieldLabel, actual, expected, null);
-        }
-
-        /**
-         * Asserts that <var>actual</var> input {@link Equality#isEqualInteger is not equal to} the <var>expected</var> input.
-         * <blockquote>{@value Equality#formatNotEqual}</blockquote>
-         *
-         * @param fieldLabel The field's name to display as part of the diagnostic message. (Cannot be blank)
-         * @param actual     The <var>actual</var> input to assert against the expectations.
-         * @param expected   The <var>expected</var> value to compare against.
-         * @param value      Additional indicator value that corresponds to the potential failure. (May be null)
-         *
-         * @return This non-null {@link Checker}.
-         */
-        public Checker<S> ifNotEqual(final String fieldLabel, final int actual, final int expected, final S value)
-        {
-            if (Equality.isEqualInteger.test(actual, expected))
-            {
-                messages.add(MessageFormat.format(Equality.formatNotEqual, className, fieldLabel, actual, expected));
-                if (value != null)
-                {
-                    values.add(value);
-                }
-            }
-
-            return this;
-        }
-
-        /**
-         * Asserts that <var>actual</var> input {@link Equality#isEqualShort is not equal to} the <var>expected</var> input.
-         * <blockquote>{@value Equality#formatNotEqual}</blockquote>
-         *
-         * @param fieldLabel The field's name to display as part of the diagnostic message. (Cannot be blank)
-         * @param actual     The <var>actual</var> input to assert against the expectations.
-         * @param expected   The <var>expected</var> value to compare against.
-         *
-         * @return This non-null {@link Checker}.
-         */
-        public Checker<S> ifNotEqual(final String fieldLabel, final short actual, final short expected)
-        {
-            return ifNotEqual(fieldLabel, actual, expected, null);
-        }
-
-        /**
-         * Asserts that <var>actual</var> input {@link Equality#isEqualShort is not equal to} the <var>expected</var> input.
-         * <blockquote>{@value Equality#formatNotEqual}</blockquote>
-         *
-         * @param fieldLabel The field's name to display as part of the diagnostic message. (Cannot be blank)
-         * @param actual     The <var>actual</var> input to assert against the expectations.
-         * @param expected   The <var>expected</var> value to compare against.
-         * @param value      Additional indicator value that corresponds to the potential failure. (May be null)
-         *
-         * @return This non-null {@link Checker}.
-         */
-        public Checker<S> ifNotEqual(final String fieldLabel, final short actual, final short expected, final S value)
-        {
-            if (Equality.isEqualShort.test(actual, expected))
-            {
-                messages.add(MessageFormat.format(Equality.formatNotEqual, className, fieldLabel, actual, expected));
-                if (value != null)
-                {
-                    values.add(value);
-                }
-            }
-
-            return this;
-        }
-
-        /**
-         * Asserts that <var>actual</var> input {@link Equality#isEqualLong is not equal to} the <var>expected</var> input.
-         * <blockquote>{@value Equality#formatNotEqual}</blockquote>
-         *
-         * @param fieldLabel The field's name to display as part of the diagnostic message. (Cannot be blank)
-         * @param actual     The <var>actual</var> input to assert against the expectations.
-         * @param expected   The <var>expected</var> value to compare against.
-         *
-         * @return This non-null {@link Checker}.
-         */
-        public Checker<S> ifNotEqual(final String fieldLabel, final long actual, final long expected)
-        {
-            return ifNotEqual(fieldLabel, actual, expected, null);
-        }
-
-        /**
-         * Asserts that <var>actual</var> input {@link Equality#isEqualLong is not equal to} the <var>expected</var> input.
-         * <blockquote>{@value Equality#formatNotEqual}</blockquote>
-         *
-         * @param fieldLabel The field's name to display as part of the diagnostic message. (Cannot be blank)
-         * @param actual     The <var>actual</var> input to assert against the expectations.
-         * @param expected   The <var>expected</var> value to compare against.
-         * @param value      Additional indicator value that corresponds to the potential failure. (May be null)
-         *
-         * @return This non-null {@link Checker}.
-         */
-        public Checker<S> ifNotEqual(final String fieldLabel, final long actual, final long expected, final S value)
-        {
-            if (Equality.isEqualLong.test(actual, expected))
-            {
-                messages.add(MessageFormat.format(Equality.formatNotEqual, className, fieldLabel, actual, expected));
-                if (value != null)
-                {
-                    values.add(value);
-                }
-            }
-
-            return this;
-        }
-
-        /**
-         * Asserts that <var>actual</var> input {@link Equality#isEqualDouble is not equal to} the <var>expected</var> input.
-         * <blockquote>{@value Equality#formatNotEqualWithError}</blockquote>
-         *
-         * @param fieldLabel The field's name to display as part of the diagnostic message. (Cannot be blank)
-         * @param actual     The <var>actual</var> input to assert against the expectations.
-         * @param expected   The <var>expected</var> value to compare against.
-         *
-         * @return This non-null {@link Checker}.
-         */
-        public Checker<S> ifNotEqual(final String fieldLabel, final double actual, final double expected, final double epsilon)
-        {
-            return ifNotEqual(fieldLabel, actual, expected, epsilon, null);
-        }
-
-        /**
-         * Asserts that <var>actual</var> input {@link Equality#isEqualDouble is not equal to} the <var>expected</var> input.
-         * <blockquote>{@value Equality#formatNotEqualWithError}</blockquote>
-         *
-         * @param fieldLabel The field's name to display as part of the diagnostic message. (Cannot be blank)
-         * @param actual     The <var>actual</var> input to assert against the expectations.
-         * @param expected   The <var>expected</var> value to compare against.
-         * @param value      Additional indicator value that corresponds to the potential failure. (May be null)
-         *
-         * @return This non-null {@link Checker}.
-         */
-        public Checker<S> ifNotEqual(final String fieldLabel, final double actual, final double expected, final double epsilon, final S value)
-        {
-            if (Equality.isEqualDouble(actual, expected, epsilon))
-            {
-                messages.add(MessageFormat.format(Equality.formatNotEqualWithError, className, fieldLabel, actual, expected, epsilon));
-                if (value != null)
-                {
-                    values.add(value);
-                }
-            }
-
-            return this;
-        }
-
-        /**
-         * Asserts that <var>actual</var> input {@link Equality#isEqualStringCaseSensitive is not equal to} the <var>expected</var> input if
-         * <var>caseSensitive</var> is true, otherwise asserts that <var>actual</var> input {@link Equality#isEqualStringCaseInsensitive is not equal
-         * to} the <var>expected</var> input.
-         * <blockquote>{@value Equality#formatNotEqual}</blockquote>
+         * Asserts that <var>actual</var> input {@link Equality#isEqualString is not equal to} the <var>expected</var> input.
+         * <blockquote>{@value Equality#formatNotEqualString}</blockquote>
          *
          * @param fieldLabel The field's name to display as part of the diagnostic message. (Cannot be blank)
          * @param actual     The <var>actual</var> input to assert against the expectations.
@@ -1205,10 +848,8 @@ public class Verifier
         }
 
         /**
-         * Asserts that <var>actual</var> input {@link Equality#isEqualStringCaseSensitive is not equal to} the <var>expected</var> input if
-         * <var>caseSensitive</var> is true, otherwise asserts that <var>actual</var> input {@link Equality#isEqualStringCaseInsensitive is not equal
-         * to} the <var>expected</var> input.
-         * <blockquote>{@value Equality#formatNotEqual}</blockquote>
+         * Asserts that <var>actual</var> input {@link Equality#isEqualString is not equal to} the <var>expected</var> input.
+         * <blockquote>{@value Equality#formatNotEqualString}</blockquote>
          *
          * @param fieldLabel The field's name to display as part of the diagnostic message. (Cannot be blank)
          * @param actual     The <var>actual</var> input to assert against the expectations.
@@ -1219,11 +860,9 @@ public class Verifier
          */
         public Checker<S> ifNotEqual(final String fieldLabel, final String actual, final String expected, final boolean caseSensitive, final S value)
         {
-            if ((caseSensitive && Equality.isEqualStringCaseSensitive.test(actual, expected)) || (!caseSensitive
-                                                                                                  && Equality.isEqualStringCaseInsensitive.test(actual,
-                                                                                                                                                expected)))
+            if (Equality.isEqualString(actual, expected, caseSensitive))
             {
-                messages.add(MessageFormat.format(Equality.formatNotEqual, className, fieldLabel, actual, expected));
+                messages.add(MessageFormat.format(Equality.formatNotEqualString, className, fieldLabel, actual, expected));
                 if (value != null)
                 {
                     values.add(value);
@@ -1234,7 +873,7 @@ public class Verifier
         }
 
         /**
-         * Asserts that <var>actual</var> input {@link Equality#isEqualLong is not equal to} the <var>expected</var> input.
+         * Asserts that <var>actual</var> input {@link Equality#isEqualCollection is not equal to} the <var>expected</var> input.
          * <blockquote>{@value Equality#formatNotEqual}</blockquote>
          *
          * @param fieldLabel The field's name to display as part of the diagnostic message. (Cannot be blank)
@@ -1249,7 +888,7 @@ public class Verifier
         }
 
         /**
-         * Asserts that <var>actual</var> input {@link Equality#isEqualLong is not equal to} the <var>expected</var> input.
+         * Asserts that <var>actual</var> input {@link Equality#isEqualCollection is not equal to} the <var>expected</var> input.
          * <blockquote>{@value Equality#formatNotEqual}</blockquote>
          *
          * @param fieldLabel The field's name to display as part of the diagnostic message. (Cannot be blank)
@@ -1274,7 +913,7 @@ public class Verifier
         }
 
         /**
-         * Asserts that <var>actual</var> input {@link Equality#isEqualLong is not equal to} the <var>expected</var> input.
+         * Asserts that <var>actual</var> input {@link Equality#isEqualObject is not equal to} the <var>expected</var> input.
          * <blockquote>{@value Equality#formatNotEqual}</blockquote>
          *
          * @param fieldLabel The field's name to display as part of the diagnostic message. (Cannot be blank)
@@ -1289,7 +928,7 @@ public class Verifier
         }
 
         /**
-         * Asserts that <var>actual</var> input {@link Equality#isEqualLong is not equal to} the <var>expected</var> input.
+         * Asserts that <var>actual</var> input {@link Equality#isEqualObject is not equal to} the <var>expected</var> input.
          * <blockquote>{@value Equality#formatNotEqual}</blockquote>
          *
          * @param fieldLabel The field's name to display as part of the diagnostic message. (Cannot be blank)
@@ -1304,6 +943,136 @@ public class Verifier
             if (Equality.isEqualObject(actual, expected))
             {
                 messages.add(MessageFormat.format(Equality.formatNotEqual, className, fieldLabel, actual, expected));
+                if (value != null)
+                {
+                    values.add(value);
+                }
+            }
+
+            return this;
+        }
+
+        /**
+         * Asserts that <var>actual</var> input {@link Equality#isEqualDateWithTolerance(Instant, Instant, long) is not equal to} the
+         * <var>expected</var> within the provided <var>tolerance</var>.
+         * <blockquote>{@value Equality#formatNotEqualDateWithTolerance}</blockquote>
+         *
+         * @param fieldLabel The field's name to display as part of the diagnostic message. (Cannot be blank)
+         * @param actual     The <var>actual1</var> input to assert against the expectations.
+         * @param expected   The <var>expected</var> value to compare against.
+         * @param tolerance  The allowed tolerance between <var>actual</var> and <var>expected</var> in seconds. (Must be positive)
+         *
+         * @return This non-null {@link Checker}.
+         */
+        public Checker<S> ifNotEqualDate(final String fieldLabel, final Instant actual, final Instant expected, final long tolerance)
+        {
+            return ifNotEqualDate(fieldLabel, actual, expected, tolerance, null);
+        }
+
+        /**
+         * Asserts that <var>actual</var> input {@link Equality#isEqualDateWithTolerance(Instant, Instant, long) is not equal to} the
+         * <var>expected</var> within the provided <var>tolerance</var>.
+         * <blockquote>{@value Equality#formatNotEqualDateWithTolerance}</blockquote>
+         *
+         * @param fieldLabel The field's name to display as part of the diagnostic message. (Cannot be blank)
+         * @param actual     The <var>actual1</var> input to assert against the expectations.
+         * @param expected   The <var>expected</var> value to compare against.
+         * @param tolerance  The allowed tolerance between <var>actual</var> and <var>expected</var> in seconds. (Must be positive)
+         * @param value      Additional indicator value that corresponds to the potential failure. (May be null)
+         *
+         * @return This non-null {@link Checker}.
+         */
+        public Checker<S> ifNotEqualDate(final String fieldLabel, final Instant actual, final Instant expected, final long tolerance, final S value)
+        {
+            if (Verifier.Equality.isEqualDateWithTolerance(actual, expected, tolerance))
+            {
+                messages.add(MessageFormat.format(Equality.formatNotEqualDateWithTolerance, className, fieldLabel, actual, expected, tolerance));
+                if (value != null)
+                {
+                    values.add(value);
+                }
+            }
+
+            return this;
+        }
+
+        /**
+         * Asserts that <var>actual</var> input {@link Equality#isEqualDateWithTolerance(LocalDateTime, LocalDateTime, long) is not equal to} the
+         * <var>expected</var> within the provided <var>tolerance</var>.
+         * <blockquote>{@value Equality#formatNotEqualDateWithTolerance}</blockquote>
+         *
+         * @param fieldLabel The field's name to display as part of the diagnostic message. (Cannot be blank)
+         * @param actual     The <var>actual1</var> input to assert against the expectations.
+         * @param expected   The <var>expected</var> value to compare against.
+         * @param tolerance  The allowed tolerance between <var>actual</var> and <var>expected</var> in seconds. (Must be positive)
+         *
+         * @return This non-null {@link Checker}.
+         */
+        public Checker<S> ifNotEqualDate(final String fieldLabel, final LocalDateTime actual, final LocalDateTime expected, final long tolerance)
+        {
+            return ifNotEqualDate(fieldLabel, actual, expected, tolerance, null);
+        }
+
+        /**
+         * Asserts that <var>actual</var> input {@link Equality#isEqualDateWithTolerance(LocalDateTime, LocalDateTime, long) is not equal to} the
+         * <var>expected</var> within the provided <var>tolerance</var>.
+         * <blockquote>{@value Equality#formatNotEqualDateWithTolerance}</blockquote>
+         *
+         * @param fieldLabel The field's name to display as part of the diagnostic message. (Cannot be blank)
+         * @param actual     The <var>actual1</var> input to assert against the expectations.
+         * @param expected   The <var>expected</var> value to compare against.
+         * @param tolerance  The allowed tolerance between <var>actual</var> and <var>expected</var> in seconds. (Must be positive)
+         * @param value      Additional indicator value that corresponds to the potential failure. (May be null)
+         *
+         * @return This non-null {@link Checker}.
+         */
+        public Checker<S> ifNotEqualDate(final String fieldLabel, final LocalDateTime actual, final LocalDateTime expected, final long tolerance,
+                                         final S value)
+        {
+            if (Verifier.Equality.isEqualDateWithTolerance(actual, expected, tolerance))
+            {
+                messages.add(MessageFormat.format(Equality.formatNotEqualDateWithTolerance, className, fieldLabel, actual, expected, tolerance));
+                if (value != null)
+                {
+                    values.add(value);
+                }
+            }
+
+            return this;
+        }
+
+        /**
+         * Asserts that <var>actual</var> input {@link Equality#isEqualWithError is not equal to} the <var>expected</var> input.
+         * <blockquote>{@value Equality#formatNotEqualWithError}</blockquote>
+         *
+         * @param fieldLabel The field's name to display as part of the diagnostic message. (Cannot be blank)
+         * @param actual     The <var>actual</var> input to assert against the expectations.
+         * @param expected   The <var>expected</var> value to compare against.
+         *
+         * @return This non-null {@link Checker}.
+         */
+        public Checker<S> ifNotEqualWithError(final String fieldLabel, final double actual, final double expected, final double epsilon)
+        {
+            return ifNotEqualWithError(fieldLabel, actual, expected, epsilon, null);
+        }
+
+        /**
+         * Asserts that <var>actual</var> input {@link Equality#isEqualWithError is not equal to} the <var>expected</var> input.
+         * <blockquote>{@value Equality#formatNotEqualWithError}</blockquote>
+         *
+         * @param fieldLabel The field's name to display as part of the diagnostic message. (Cannot be blank)
+         * @param actual     The <var>actual</var> input to assert against the expectations.
+         * @param expected   The <var>expected</var> value to compare against.
+         * @param value      Additional indicator value that corresponds to the potential failure. (May be null)
+         *
+         * @return This non-null {@link Checker}.
+         */
+        public Checker<S> ifNotEqualWithError(final String fieldLabel, final double actual, final double expected, final double epsilon,
+                                              final S value)
+        {
+            if (Equality.isEqualWithError(actual, expected, epsilon))
+            {
+                messages.add(MessageFormat.format(Equality.formatNotEqualWithError, className, fieldLabel, actual, expected, epsilon));
                 if (value != null)
                 {
                     values.add(value);
@@ -1425,7 +1194,7 @@ public class Verifier
             {
                 messages.add(MessageFormat.format(Strings.formatIsNotWithinMaxLength,
                                                   className,
-                                                  fieldLabel,
+                                                  fieldLabel, actual,
                                                   actual != null ? actual.length() : 0,
                                                   maxLength));
                 if (value != null)
@@ -1591,7 +1360,7 @@ public class Verifier
             {
                 messages.add(MessageFormat.format(Strings.formatIsWithinMaxLength,
                                                   className,
-                                                  fieldLabel,
+                                                  fieldLabel, actual,
                                                   actual != null ? actual.length() : 0,
                                                   maxLength));
                 if (value != null)
@@ -1735,14 +1504,11 @@ public class Verifier
                                                                + Verifier.tabSpacer
                                                                + "Expected collection[{2}] to be empty, or null.";
         private static final String formatMatchesAllValues   = Verifier.formatAssertionFailedField
-                                                               + Verifier.tabSpacer
-                                                               + "Expected collection[{2}] to match all values of collection[{3}].";
+                                                               + Verifier.tabSpacer + "Expected collection[{2}] to match all values.";
         private static final String formatMatchesAnyValues   = Verifier.formatAssertionFailedField
-                                                               + Verifier.tabSpacer
-                                                               + "Expected collection[{2}] to match any values of collection[{3}].";
+                                                               + Verifier.tabSpacer + "Expected collection[{2}] to match any values.";
         private static final String formatMatchesNoValues    = Verifier.formatAssertionFailedField
-                                                               + Verifier.tabSpacer
-                                                               + "Expected collection[{2}] to matches no values of collection[{3}].";
+                                                               + Verifier.tabSpacer + "Expected collection[{2}] to match no values.";
         private static final String formatNotEmptyCollection = Verifier.formatAssertionFailedField
                                                                + Verifier.tabSpacer
                                                                + "Expected collection to not be empty, or null.";
@@ -1798,46 +1564,30 @@ public class Verifier
 
     private static class Equality
     {
-        private static final String formatEqual             = Verifier.formatAssertionFailedField
-                                                              + Verifier.tabSpacer
-                                                              + "Actual[{2}] ≡ Expected[{3}]";
-        private static final String formatEqualWithError    = Verifier.formatAssertionFailedField
-                                                              + Verifier.tabSpacer
-                                                              + "Actual[{2}] ± ε[{4}] ≡ Expected[{3}]";
-        private static final String formatNotEqual          = Verifier.formatAssertionFailedField
-                                                              + Verifier.tabSpacer
-                                                              + "Actual[{2}] ≠ Expected[{3}]";
-        private static final String formatNotEqualWithError = Verifier.formatAssertionFailedField
-                                                              + Verifier.tabSpacer
-                                                              + "Actual[{2}] ± ε[{4}] ≠ Expected[{3}]";
-
-        private static final BiPredicate<Boolean, Boolean>     isEqualBoolean               = (actual, expected) -> actual == expected;
-        private static final BiPredicate<Character, Character> isEqualCharacter             = (actual, expected) -> actual == expected;
-        private static final BiPredicate<Integer, Integer>     isEqualInteger               = (actual, expected) -> {
-            if (expected == null)
-                return actual == null;
-            return expected.equals(actual);
-        };
-        private static final BiPredicate<Long, Long>           isEqualLong                  = (actual, expected) -> {
-            if (expected == null)
-                return actual == null;
-            return expected.equals(actual);
-        };
-        private static final BiPredicate<Short, Short>         isEqualShort                 = (actual, expected) -> {
-            if (expected == null)
-                return actual == null;
-            return expected.equals(actual);
-        };
-        private static final BiPredicate<String, String>       isEqualStringCaseInsensitive = (actual, expected) -> {
-            if (expected == null)
-                return actual == null;
-            return expected.equalsIgnoreCase(actual);
-        };
-        private static final BiPredicate<String, String>       isEqualStringCaseSensitive   = (actual, expected) -> {
-            if (expected == null)
-                return actual == null;
-            return expected.equals(actual);
-        };
+        private static final String formatEqual                     = Verifier.formatAssertionFailedField
+                                                                      + Verifier.tabSpacer
+                                                                      + "Actual[{2}] ≡ Expected[{3}].";
+        private static final String formatEqualString               = Verifier.formatAssertionFailedField
+                                                                      + Verifier.tabSpacer
+                                                                      + "Actual[\"{2}\"] ≡ Expected[\"{3}\"].";
+        private static final String formatEqualDateWithTolerance    = Verifier.formatAssertionFailedField
+                                                                      + Verifier.tabSpacer
+                                                                      + "Actual[{2}] ± ε[{4} s] ≡ Expected[{3}].";
+        private static final String formatEqualWithError            = Verifier.formatAssertionFailedField
+                                                                      + Verifier.tabSpacer
+                                                                      + "Actual[{2}] ± ε[{4}] ≡ Expected[{3}].";
+        private static final String formatNotEqual                  = Verifier.formatAssertionFailedField
+                                                                      + Verifier.tabSpacer
+                                                                      + "Actual[{2}] ≠ Expected[{3}].";
+        private static final String formatNotEqualString            = Verifier.formatAssertionFailedField
+                                                                      + Verifier.tabSpacer
+                                                                      + "Actual[\"{2}\"] ≠ Expected[\"{3}\"].";
+        private static final String formatNotEqualDateWithTolerance = Verifier.formatAssertionFailedField
+                                                                      + Verifier.tabSpacer
+                                                                      + "Actual[{2}] ± ε[{4} s] ≠ Expected[{3}].";
+        private static final String formatNotEqualWithError         = Verifier.formatAssertionFailedField
+                                                                      + Verifier.tabSpacer
+                                                                      + "Actual[{2}] ± ε[{4}] ≠ Expected[{3}].";
 
         private static <T> boolean isEqualCollection(final Collection<T> actual, final Collection<T> expected)
         {
@@ -1846,9 +1596,23 @@ public class Verifier
             return expected.equals(actual);
         }
 
-        private static boolean isEqualDouble(final double actual, final double expected, final double epsilon)
+        private static boolean isEqualDateWithTolerance(final LocalDateTime actual, final LocalDateTime expected, final long tolerance)
         {
-            return Math.abs(expected - actual) < epsilon;
+            if (expected == null)
+                return actual == null;
+            else if (actual == null)
+                return false;
+            final ZoneOffset utcOffset = ZoneOffset.of("Z");
+            return Math.abs(expected.toEpochSecond(utcOffset) - actual.toEpochSecond(utcOffset)) <= tolerance;
+        }
+
+        private static boolean isEqualDateWithTolerance(final Instant actual, final Instant expected, final long tolerance)
+        {
+            if (expected == null)
+                return actual == null;
+            else if (actual == null)
+                return false;
+            return Math.abs(expected.getEpochSecond() - actual.getEpochSecond()) <= tolerance;
         }
 
         private static <T> boolean isEqualObject(final T actual, final T expected)
@@ -1856,6 +1620,18 @@ public class Verifier
             if (expected == null)
                 return actual == null;
             return expected.equals(actual);
+        }
+
+        private static boolean isEqualString(final String actual, final String expected, final boolean caseSensitive)
+        {
+            if (expected == null)
+                return actual == null;
+            return caseSensitive ? expected.equals(actual) : expected.equalsIgnoreCase(actual);
+        }
+
+        private static boolean isEqualWithError(final double actual, final double expected, final double epsilon)
+        {
+            return Math.abs(expected - actual) <= epsilon;
         }
     }
 
@@ -1989,14 +1765,12 @@ public class Verifier
                                                                  + Verifier.tabSpacer
                                                                  + "Expected string[\"{2}\"] to be empty, or null.";
         private static final String formatIsNotWithinMaxLength = Verifier.formatAssertionFailedField
-                                                                 + Verifier.tabSpacer
-                                                                 + "Expected string length[{2}] to exceed length[{3}].";
+                                                                 + Verifier.tabSpacer + "Expected string[\"{2}\"] length[{3}] to exceed length[{4}].";
         private static final String formatIsWithinMaxLength    = Verifier.formatAssertionFailedField
                                                                  + Verifier.tabSpacer
-                                                                 + "Expected string length[{2}] to be within length[{3}].";
+                                                                 + "Expected string[\"{2}\"] length[{3}] to be within length[{4}].";
         private static final String formatMatches              = Verifier.formatAssertionFailedField
-                                                                 + Verifier.tabSpacer
-                                                                 + "Expected string[\"{2}\"] to match pattern[\"{3}\"]";
+                                                                 + Verifier.tabSpacer + "Expected string[\"{2}\"] to match pattern[\"{3}\"].";
         private static final String formatNotBlank             = Verifier.formatAssertionFailedField
                                                                  + Verifier.tabSpacer
                                                                  + "Expected string to not be blank, empty, or null.";
@@ -2004,8 +1778,7 @@ public class Verifier
                                                                  + Verifier.tabSpacer
                                                                  + "Expected string to not be empty, or null.";
         private static final String formatNotMatches           = Verifier.formatAssertionFailedField
-                                                                 + Verifier.tabSpacer
-                                                                 + "Expected string[\"{2}\"] to not match pattern[\"{3}\"]";
+                                                                 + Verifier.tabSpacer + "Expected string[\"{2}\"] to not match pattern[\"{3}\"].";
 
         private static final Predicate<String>            isEmpty           = actual -> actual == null || actual.isEmpty();
         private static final BiPredicate<String, Integer> isWithinMaxLength = (actual, maxLength) -> {
@@ -2019,7 +1792,7 @@ public class Verifier
             return actual.matches(pattern);
         };
 
-        private static final Pattern           patternBlank = Pattern.compile("^\\s$", Pattern.DOTALL);
+        private static final Pattern           patternBlank = Pattern.compile("^\\s*$", Pattern.DOTALL);
         private static final Predicate<String> isBlank      = actual -> actual == null || patternBlank.matcher(actual).matches();
     }
 }

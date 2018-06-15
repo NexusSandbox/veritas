@@ -1,7 +1,6 @@
 package eli.veritas.exception;
 
-import java.util.Collection;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -20,6 +19,24 @@ public class CompositeException extends RuntimeException
     {
         this(items.keySet());
         items.values().forEach(ex -> addSuppressed(ex));
+    }
+
+    public CompositeException merger(final CompositeException ex)
+    {
+        final List<String> messages = new LinkedList<>();
+        messages.add(getMessage());
+        messages.add(ex.getMessage());
+
+        return new CompositeException(messages);
+    }
+
+    public CompositeException mergerWithExceptions(final CompositeException ex)
+    {
+        final Map<String, Exception> messages = new LinkedHashMap<>(2);
+        messages.put(getMessage(), this);
+        messages.put(ex.getMessage(), ex);
+
+        return new CompositeException(messages);
     }
 
     protected static String joiner(final Collection<String> items)
