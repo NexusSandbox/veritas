@@ -1,5 +1,6 @@
 package eli.veritas;
 
+import com.google.common.collect.Lists;
 import eli.veritas.exception.CompositeException;
 import java.text.MessageFormat;
 import java.time.Instant;
@@ -67,18 +68,10 @@ public class Verifier {
       this.className = clazz.getSimpleName();
     }
 
-    /**
-     * Asserts that <var>actual</var> input {@link Strings#isBlank is blank}, i.e. is either null,
-     * empty, or contains only whitespace.
-     * <blockquote>{@value Strings#formatBlank}</blockquote>
-     *
-     * @param fieldLabel The field's name to display as part of the diagnostic message. (Cannot be
-     * blank)
-     * @param actual The <var>actual</var> input to assert against the expectations.
-     * @return This non-null {@link Checker}.
-     */
-    public Checker<S> ifBlank(final String fieldLabel, final String actual) {
-      return ifBlank(fieldLabel, actual, null);
+    private void addValues(final S... values) {
+      if (values != null) {
+        this.values.addAll(Lists.newArrayList(values));
+      }
     }
 
     /**
@@ -89,16 +82,14 @@ public class Verifier {
      * @param fieldLabel The field's name to display as part of the diagnostic message. (Cannot be
      * blank)
      * @param actual The <var>actual</var> input to assert against the expectations.
-     * @param value Additional indicator value that corresponds to the potential failure. (May be
+     * @param values Additional indicator values that corresponds to the potential failure. (May be
      * null)
      * @return This non-null {@link Checker}.
      */
-    public Checker<S> ifBlank(final String fieldLabel, final String actual, final S value) {
-      if (Verifier.Strings.isBlank.negate().test(actual)) {
+    public Checker<S> ifBlank(final String fieldLabel, final String actual, final S... values) {
+      if (Verifier.Strings.isBlank.test(actual)) {
         messages.add(MessageFormat.format(Strings.formatBlank, className, fieldLabel, actual));
-        if (value != null) {
-          values.add(value);
-        }
+        addValues(values);
       }
 
       return this;
@@ -114,35 +105,16 @@ public class Verifier {
      * blank)
      * @param actual The <var>actual</var> input to assert against the expectations.
      * @param expected The <var>expected</var> values to compare against.
-     * @return This non-null {@link Checker}.
-     */
-    public <T> Checker<S> ifContainsAllValues(final String fieldLabel, final Collection<T> actual,
-        final Collection<T> expected) {
-      return ifContainsAllValues(fieldLabel, actual, expected, null);
-    }
-
-    /**
-     * Asserts that <var>actual</var> input {@link Collections#containsAllValues(Collection,
-     * Collection) contains all values} of the
-     * <var>expected</var> {@link Collection}.
-     * <blockquote>{@value Collections#formatContainsAllValues}</blockquote>
-     *
-     * @param fieldLabel The field's name to display as part of the diagnostic message. (Cannot be
-     * blank)
-     * @param actual The <var>actual</var> input to assert against the expectations.
-     * @param expected The <var>expected</var> values to compare against.
-     * @param value Additional indicator value that corresponds to the potential failure. (May be
+     * @param values Additional indicator values that corresponds to the potential failure. (May be
      * null)
      * @return This non-null {@link Checker}.
      */
     public <T> Checker<S> ifContainsAllValues(final String fieldLabel, final Collection<T> actual,
-        final Collection<T> expected, final S value) {
-      if (!Verifier.Collections.containsAllValues(actual, expected)) {
+        final Collection<T> expected, final S... values) {
+      if (Verifier.Collections.containsAllValues(actual, expected)) {
         messages.add(MessageFormat
             .format(Collections.formatContainsAllValues, className, fieldLabel, actual, expected));
-        if (value != null) {
-          values.add(value);
-        }
+        addValues(values);
       }
 
       return this;
@@ -158,35 +130,16 @@ public class Verifier {
      * blank)
      * @param actual The <var>actual</var> input to assert against the expectations.
      * @param expected The <var>expected</var> values to compare against.
-     * @return This non-null {@link Checker}.
-     */
-    public <T> Checker<S> ifContainsAnyValues(final String fieldLabel, final Collection<T> actual,
-        final Collection<T> expected) {
-      return ifContainsAnyValues(fieldLabel, actual, expected, null);
-    }
-
-    /**
-     * Asserts that <var>actual</var> input {@link Collections#containsAnyValues(Collection,
-     * Collection) contains any values} of the
-     * <var>expected</var> {@link Collection}.
-     * <blockquote>{@value Collections#formatContainsAnyValues}</blockquote>
-     *
-     * @param fieldLabel The field's name to display as part of the diagnostic message. (Cannot be
-     * blank)
-     * @param actual The <var>actual</var> input to assert against the expectations.
-     * @param expected The <var>expected</var> values to compare against.
-     * @param value Additional indicator value that corresponds to the potential failure. (May be
+     * @param values Additional indicator values that corresponds to the potential failure. (May be
      * null)
      * @return This non-null {@link Checker}.
      */
     public <T> Checker<S> ifContainsAnyValues(final String fieldLabel, final Collection<T> actual,
-        final Collection<T> expected, final S value) {
-      if (!Verifier.Collections.containsAnyValues(actual, expected)) {
+        final Collection<T> expected, final S... values) {
+      if (Verifier.Collections.containsAnyValues(actual, expected)) {
         messages.add(MessageFormat
             .format(Collections.formatContainsAnyValues, className, fieldLabel, actual, expected));
-        if (value != null) {
-          values.add(value);
-        }
+        addValues(values);
       }
 
       return this;
@@ -202,35 +155,16 @@ public class Verifier {
      * blank)
      * @param actual The <var>actual</var> input to assert against the expectations.
      * @param expected The <var>expected</var> values to compare against.
-     * @return This non-null {@link Checker}.
-     */
-    public <T> Checker<S> ifContainsNoValues(final String fieldLabel, final Collection<T> actual,
-        final Collection<T> expected) {
-      return ifContainsNoValues(fieldLabel, actual, expected, null);
-    }
-
-    /**
-     * Asserts that <var>actual</var> input {@link Collections#containsNoValues(Collection,
-     * Collection) contains no values} of the
-     * <var>expected</var> {@link Collection}.
-     * <blockquote>{@value Collections#formatContainsNoValues}</blockquote>
-     *
-     * @param fieldLabel The field's name to display as part of the diagnostic message. (Cannot be
-     * blank)
-     * @param actual The <var>actual</var> input to assert against the expectations.
-     * @param expected The <var>expected</var> values to compare against.
-     * @param value Additional indicator value that corresponds to the potential failure. (May be
+     * @param values Additional indicator values that corresponds to the potential failure. (May be
      * null)
      * @return This non-null {@link Checker}.
      */
     public <T> Checker<S> ifContainsNoValues(final String fieldLabel, final Collection<T> actual,
-        final Collection<T> expected, final S value) {
-      if (!Verifier.Collections.containsNoValues(actual, expected)) {
+        final Collection<T> expected, final S... values) {
+      if (Verifier.Collections.containsNoValues(actual, expected)) {
         messages.add(MessageFormat
             .format(Collections.formatContainsNoValues, className, fieldLabel, actual, expected));
-        if (value != null) {
-          values.add(value);
-        }
+        addValues(values);
       }
 
       return this;
@@ -244,30 +178,14 @@ public class Verifier {
      * @param fieldLabel The field's name to display as part of the diagnostic message. (Cannot be
      * blank)
      * @param actual The <var>actual</var> input to assert against the expectations.
-     * @return This non-null {@link Checker}.
-     */
-    public Checker<S> ifEmpty(final String fieldLabel, final String actual) {
-      return ifEmpty(fieldLabel, actual, null);
-    }
-
-    /**
-     * Asserts that <var>actual</var> input {@link Strings#isEmpty is empty}, i.e. is either null,
-     * or empty.
-     * <blockquote>{@value Strings#formatEmpty}</blockquote>
-     *
-     * @param fieldLabel The field's name to display as part of the diagnostic message. (Cannot be
-     * blank)
-     * @param actual The <var>actual</var> input to assert against the expectations.
-     * @param value Additional indicator value that corresponds to the potential failure. (May be
+     * @param values Additional indicator values that corresponds to the potential failure. (May be
      * null)
      * @return This non-null {@link Checker}.
      */
-    public Checker<S> ifEmpty(final String fieldLabel, final String actual, final S value) {
-      if (Verifier.Strings.isEmpty.negate().test(actual)) {
+    public Checker<S> ifEmpty(final String fieldLabel, final String actual, final S... values) {
+      if (Verifier.Strings.isEmpty.test(actual)) {
         messages.add(MessageFormat.format(Strings.formatEmpty, className, fieldLabel, actual));
-        if (value != null) {
-          values.add(value);
-        }
+        addValues(values);
       }
 
       return this;
@@ -280,33 +198,17 @@ public class Verifier {
      * @param fieldLabel The field's name to display as part of the diagnostic message. (Cannot be
      * blank)
      * @param actual The <var>actual</var> input to assert against the expectations.
-     * @param <T> The type of {@link Collection} to check.
-     * @return This non-null {@link Checker}.
-     */
-    public <T> Checker<S> ifEmpty(final String fieldLabel, final Collection<T> actual) {
-      return ifEmpty(fieldLabel, actual, null);
-    }
-
-    /**
-     * Asserts that <var>actual</var> input {@link Collections#isEmpty is empty}.
-     * <blockquote>{@value Collections#formatEmptyCollection}</blockquote>
-     *
-     * @param fieldLabel The field's name to display as part of the diagnostic message. (Cannot be
-     * blank)
-     * @param actual The <var>actual</var> input to assert against the expectations.
-     * @param value Additional indicator value that corresponds to the potential failure. (May be
+     * @param values Additional indicator values that corresponds to the potential failure. (May be
      * null)
      * @param <T> The type of {@link Collection} to check.
      * @return This non-null {@link Checker}.
      */
     public <T> Checker<S> ifEmpty(final String fieldLabel, final Collection<T> actual,
-        final S value) {
-      if (Verifier.Collections.isEmpty.negate().test(actual)) {
+        final S... values) {
+      if (Verifier.Collections.isEmpty.test(actual)) {
         messages.add(
             MessageFormat.format(Collections.formatEmptyCollection, className, fieldLabel, actual));
-        if (value != null) {
-          values.add(value);
-        }
+        addValues(values);
       }
 
       return this;
@@ -321,34 +223,16 @@ public class Verifier {
      * blank)
      * @param actual The <var>actual</var> input to assert against the expectations.
      * @param expected The <var>expected</var> value to compare against.
-     * @return This non-null {@link Checker}.
-     */
-    public Checker<S> ifEqual(final String fieldLabel, final String actual, final String expected,
-        final boolean caseSensitive) {
-      return ifEqual(fieldLabel, actual, expected, caseSensitive, null);
-    }
-
-    /**
-     * Asserts that <var>actual</var> input {@link Equality#isEqualString is equal to} the
-     * <var>expected</var> input.
-     * <blockquote>{@value Equality#formatEqualString}</blockquote>
-     *
-     * @param fieldLabel The field's name to display as part of the diagnostic message. (Cannot be
-     * blank)
-     * @param actual The <var>actual</var> input to assert against the expectations.
-     * @param expected The <var>expected</var> value to compare against.
-     * @param value Additional indicator value that corresponds to the potential failure. (May be
+     * @param values Additional indicator values that corresponds to the potential failure. (May be
      * null)
      * @return This non-null {@link Checker}.
      */
     public Checker<S> ifEqual(final String fieldLabel, final String actual, final String expected,
-        final boolean caseSensitive, final S value) {
-      if (!Equality.isEqualString(actual, expected, caseSensitive)) {
+        final boolean caseSensitive, final S... values) {
+      if (Equality.isEqualString(actual, expected, caseSensitive)) {
         messages.add(MessageFormat
             .format(Equality.formatEqualString, className, fieldLabel, actual, expected));
-        if (value != null) {
-          values.add(value);
-        }
+        addValues(values);
       }
 
       return this;
@@ -363,34 +247,16 @@ public class Verifier {
      * blank)
      * @param actual The <var>actual</var> input to assert against the expectations.
      * @param expected The <var>expected</var> value to compare against.
-     * @return This non-null {@link Checker}.
-     */
-    public <T> Checker<S> ifEqual(final String fieldLabel, final Collection<T> actual,
-        final Collection<T> expected) {
-      return ifEqual(fieldLabel, actual, expected, null);
-    }
-
-    /**
-     * Asserts that <var>actual</var> input {@link Equality#isEqualCollection is equal to} the
-     * <var>expected</var> input.
-     * <blockquote>{@value Equality#formatEqual}</blockquote>
-     *
-     * @param fieldLabel The field's name to display as part of the diagnostic message. (Cannot be
-     * blank)
-     * @param actual The <var>actual</var> input to assert against the expectations.
-     * @param expected The <var>expected</var> value to compare against.
-     * @param value Additional indicator value that corresponds to the potential failure. (May be
+     * @param values Additional indicator values that corresponds to the potential failure. (May be
      * null)
      * @return This non-null {@link Checker}.
      */
     public <T> Checker<S> ifEqual(final String fieldLabel, final Collection<T> actual,
-        final Collection<T> expected, final S value) {
-      if (!Equality.isEqualCollection(actual, expected)) {
+        final Collection<T> expected, final S... values) {
+      if (Equality.isEqualCollection(actual, expected)) {
         messages.add(
             MessageFormat.format(Equality.formatEqual, className, fieldLabel, actual, expected));
-        if (value != null) {
-          values.add(value);
-        }
+        addValues(values);
       }
 
       return this;
@@ -405,33 +271,16 @@ public class Verifier {
      * blank)
      * @param actual The <var>actual</var> input to assert against the expectations.
      * @param expected The <var>expected</var> value to compare against.
-     * @return This non-null {@link Checker}.
-     */
-    public <T> Checker<S> ifEqual(final String fieldLabel, final T actual, final T expected) {
-      return ifEqual(fieldLabel, actual, expected, null);
-    }
-
-    /**
-     * Asserts that <var>actual</var> input {@link Equality#isEqualCollection is equal to} the
-     * <var>expected</var> input.
-     * <blockquote>{@value Equality#formatEqual}</blockquote>
-     *
-     * @param fieldLabel The field's name to display as part of the diagnostic message. (Cannot be
-     * blank)
-     * @param actual The <var>actual</var> input to assert against the expectations.
-     * @param expected The <var>expected</var> value to compare against.
-     * @param value Additional indicator value that corresponds to the potential failure. (May be
+     * @param values Additional indicator values that corresponds to the potential failure. (May be
      * null)
      * @return This non-null {@link Checker}.
      */
     public <T> Checker<S> ifEqual(final String fieldLabel, final T actual, final T expected,
-        final S value) {
-      if (!Equality.isEqualObject(actual, expected)) {
+        final S... values) {
+      if (Equality.isEqualObject(actual, expected)) {
         messages.add(
             MessageFormat.format(Equality.formatEqual, className, fieldLabel, actual, expected));
-        if (value != null) {
-          values.add(value);
-        }
+        addValues(values);
       }
 
       return this;
@@ -449,38 +298,17 @@ public class Verifier {
      * @param expected The <var>expected</var> value to compare against.
      * @param tolerance The allowed tolerance between <var>actual</var> and <var>expected</var> in
      * seconds. (Must be positive)
-     * @return This non-null {@link Checker}.
-     */
-    public Checker<S> ifEqualDate(final String fieldLabel, final Instant actual,
-        final Instant expected, final long tolerance) {
-      return ifEqualDate(fieldLabel, actual, expected, tolerance, null);
-    }
-
-    /**
-     * Asserts that <var>actual</var> input {@link Equality#isEqualDateWithTolerance(Instant,
-     * Instant, long) is equal to} the <var>expected</var> within the provided
-     * <var>tolerance</var>.
-     * <blockquote>{@value Equality#formatEqualWithError}</blockquote>
-     *
-     * @param fieldLabel The field's name to display as part of the diagnostic message. (Cannot be
-     * blank)
-     * @param actual The <var>actual1</var> input to assert against the expectations.
-     * @param expected The <var>expected</var> value to compare against.
-     * @param tolerance The allowed tolerance between <var>actual</var> and <var>expected</var> in
-     * seconds. (Must be positive)
-     * @param value Additional indicator value that corresponds to the potential failure. (May be
+     * @param values Additional indicator values that corresponds to the potential failure. (May be
      * null)
      * @return This non-null {@link Checker}.
      */
     public Checker<S> ifEqualDate(final String fieldLabel, final Instant actual,
-        final Instant expected, final long tolerance, final S value) {
-      if (!Verifier.Equality.isEqualDateWithTolerance(actual, expected, tolerance)) {
+        final Instant expected, final long tolerance, final S... values) {
+      if (Equality.isEqualDateWithTolerance(actual, expected, tolerance)) {
         messages.add(MessageFormat
             .format(Equality.formatEqualDateWithTolerance, className, fieldLabel, actual, expected,
                 tolerance));
-        if (value != null) {
-          values.add(value);
-        }
+        addValues(values);
       }
 
       return this;
@@ -498,41 +326,17 @@ public class Verifier {
      * @param expected The <var>expected</var> value to compare against.
      * @param tolerance The allowed tolerance between <var>actual</var> and <var>expected</var> in
      * seconds. (Must be positive)
+     * @param values Additional indicator values that corresponds to the potential failure. (May be
+     * null)
      * @return This non-null {@link Checker}.
      */
     public Checker<S> ifEqualDate(final String fieldLabel, final LocalDateTime actual,
-        final LocalDateTime expected, final long tolerance) {
-      return ifEqualDate(fieldLabel, actual, expected, tolerance, null);
-    }
-
-    /**
-     * Asserts that <var>actual</var> input {@link Equality#isEqualDateWithTolerance(LocalDateTime,
-     * LocalDateTime, long) is equal to} the
-     * <var>expected</var> within the provided <var>tolerance</var>.
-     * <blockquote>{@value Equality#formatEqualDateWithTolerance}</blockquote>
-     *
-     * @param fieldLabel The field's name to display as part of the diagnostic message. (Cannot be
-     * blank)
-     * @param actual The <var>actual1</var> input to assert against the expectations.
-     * @param expected The <var>expected</var> value to compare against.
-     * @param tolerance The allowed tolerance between <var>actual</var> and <var>expected</var> in
-     * seconds. (Must be positive)
-     * @param value Additional indicator value that corresponds to the potential failure. (May be
-     * null)
-     * @return This non-null {@link Checker}.
-     */
-    public Checker<S> ifEqualDate(final String fieldLabel,
-        final LocalDateTime actual,
-        final LocalDateTime expected,
-        final long tolerance,
-        final S value) {
-      if (!Verifier.Equality.isEqualDateWithTolerance(actual, expected, tolerance)) {
+        final LocalDateTime expected, final long tolerance, final S... values) {
+      if (Equality.isEqualDateWithTolerance(actual, expected, tolerance)) {
         messages.add(MessageFormat
             .format(Equality.formatEqualDateWithTolerance, className, fieldLabel, actual, expected,
                 tolerance));
-        if (value != null) {
-          values.add(value);
-        }
+        addValues(values);
       }
 
       return this;
@@ -547,35 +351,17 @@ public class Verifier {
      * blank)
      * @param actual The <var>actual</var> input to assert against the expectations.
      * @param expected The <var>expected</var> value to compare against.
-     * @return This non-null {@link Checker}.
-     */
-    public Checker<S> ifEqualWithError(final String fieldLabel, final double actual,
-        final double expected, final double epsilon) {
-      return ifEqualWithError(fieldLabel, actual, expected, epsilon, null);
-    }
-
-    /**
-     * Asserts that <var>actual</var> input {@link Equality#isEqualWithError is equal to} the
-     * <var>expected</var> input.
-     * <blockquote>{@value Equality#formatEqualWithError}</blockquote>
-     *
-     * @param fieldLabel The field's name to display as part of the diagnostic message. (Cannot be
-     * blank)
-     * @param actual The <var>actual</var> input to assert against the expectations.
-     * @param expected The <var>expected</var> value to compare against.
-     * @param value Additional indicator value that corresponds to the potential failure. (May be
+     * @param values Additional indicator values that corresponds to the potential failure. (May be
      * null)
      * @return This non-null {@link Checker}.
      */
     public Checker<S> ifEqualWithError(final String fieldLabel, final double actual,
-        final double expected, final double epsilon, final S value) {
-      if (!Equality.isEqualWithError(actual, expected, epsilon)) {
+        final double expected, final double epsilon, final S... values) {
+      if (Equality.isEqualWithError(actual, expected, epsilon)) {
         messages.add(MessageFormat
             .format(Equality.formatEqualWithError, className, fieldLabel, actual, expected,
                 epsilon));
-        if (value != null) {
-          values.add(value);
-        }
+        addValues(values);
       }
 
       return this;
@@ -590,34 +376,16 @@ public class Verifier {
      * blank)
      * @param actual The <var>actual</var> input to assert against the expectations.
      * @param pattern The regular expression <var>pattern</var> value to compare against.
-     * @return This non-null {@link Checker}.
-     */
-    public Checker<S> ifMatches(final String fieldLabel, final String actual,
-        final String pattern) {
-      return ifMatches(fieldLabel, actual, pattern, null);
-    }
-
-    /**
-     * Asserts that <var>actual</var> input {@link Strings#matches matches} the regular expression
-     * <var>pattern</var> input.
-     * <blockquote>{@value Strings#formatMatches}</blockquote>
-     *
-     * @param fieldLabel The field's name to display as part of the diagnostic message. (Cannot be
-     * blank)
-     * @param actual The <var>actual</var> input to assert against the expectations.
-     * @param pattern The regular expression <var>pattern</var> value to compare against.
-     * @param value Additional indicator value that corresponds to the potential failure. (May be
+     * @param values Additional indicator values that corresponds to the potential failure. (May be
      * null)
      * @return This non-null {@link Checker}.
      */
     public Checker<S> ifMatches(final String fieldLabel, final String actual, final String pattern,
-        final S value) {
-      if (Strings.matches.negate().test(actual, pattern)) {
+        final S... values) {
+      if (Strings.matches.test(actual, pattern)) {
         messages.add(
             MessageFormat.format(Strings.formatMatches, className, fieldLabel, actual, pattern));
-        if (value != null) {
-          values.add(value);
-        }
+        addValues(values);
       }
 
       return this;
@@ -633,35 +401,16 @@ public class Verifier {
      * blank)
      * @param actual The <var>actual</var> input to assert against the expectations.
      * @param matcher The <var>expected</var> matcher to compare against.
-     * @return This non-null {@link Checker}.
-     */
-    public <T> Checker<S> ifMatchesAllValues(final String fieldLabel, final Collection<T> actual,
-        final Predicate<T> matcher) {
-      return ifMatchesAllValues(fieldLabel, actual, matcher, null);
-    }
-
-    /**
-     * Asserts that <var>actual</var> input {@link Collections#matchesAllValues(Collection,
-     * Predicate) matches all values} of the
-     * <var>expected</var> {@link Predicate lambda}.
-     * <blockquote>{@value Collections#formatMatchesAllValues}</blockquote>
-     *
-     * @param fieldLabel The field's name to display as part of the diagnostic message. (Cannot be
-     * blank)
-     * @param actual The <var>actual</var> input to assert against the expectations.
-     * @param matcher The <var>expected</var> matcher to compare against.
-     * @param value Additional indicator value that corresponds to the potential failure. (May be
+     * @param values Additional indicator values that corresponds to the potential failure. (May be
      * null)
      * @return This non-null {@link Checker}.
      */
     public <T> Checker<S> ifMatchesAllValues(final String fieldLabel, final Collection<T> actual,
-        final Predicate<T> matcher, final S value) {
-      if (!Verifier.Collections.matchesAllValues(actual, matcher)) {
+        final Predicate<T> matcher, final S... values) {
+      if (Collections.matchesAllValues(actual, matcher)) {
         messages.add(MessageFormat
             .format(Collections.formatMatchesAllValues, className, fieldLabel, actual));
-        if (value != null) {
-          values.add(value);
-        }
+        addValues(values);
       }
 
       return this;
@@ -677,35 +426,16 @@ public class Verifier {
      * blank)
      * @param actual The <var>actual</var> input to assert against the expectations.
      * @param matcher The <var>expected</var> matcher to compare against.
-     * @return This non-null {@link Checker}.
-     */
-    public <T> Checker<S> ifMatchesAnyValues(final String fieldLabel, final Collection<T> actual,
-        final Predicate<T> matcher) {
-      return ifMatchesAnyValues(fieldLabel, actual, matcher, null);
-    }
-
-    /**
-     * Asserts that <var>actual</var> input {@link Collections#matchesAnyValues(Collection,
-     * Predicate) matches any values} of the
-     * <var>expected</var> {@link Predicate lambda}.
-     * <blockquote>{@value Collections#formatMatchesAnyValues}</blockquote>
-     *
-     * @param fieldLabel The field's name to display as part of the diagnostic message. (Cannot be
-     * blank)
-     * @param actual The <var>actual</var> input to assert against the expectations.
-     * @param matcher The <var>expected</var> matcher to compare against.
-     * @param value Additional indicator value that corresponds to the potential failure. (May be
+     * @param values Additional indicator values that corresponds to the potential failure. (May be
      * null)
      * @return This non-null {@link Checker}.
      */
     public <T> Checker<S> ifMatchesAnyValues(final String fieldLabel, final Collection<T> actual,
-        final Predicate<T> matcher, final S value) {
-      if (!Verifier.Collections.matchesAnyValues(actual, matcher)) {
+        final Predicate<T> matcher, final S... values) {
+      if (Collections.matchesAnyValues(actual, matcher)) {
         messages.add(MessageFormat
             .format(Collections.formatMatchesAnyValues, className, fieldLabel, actual));
-        if (value != null) {
-          values.add(value);
-        }
+        addValues(values);
       }
 
       return this;
@@ -721,35 +451,16 @@ public class Verifier {
      * blank)
      * @param actual The <var>actual</var> input to assert against the expectations.
      * @param matcher The <var>expected</var> matcher to compare against.
-     * @return This non-null {@link Checker}.
-     */
-    public <T> Checker<S> ifMatchesNoValues(final String fieldLabel, final Collection<T> actual,
-        final Predicate<T> matcher) {
-      return ifMatchesNoValues(fieldLabel, actual, matcher, null);
-    }
-
-    /**
-     * Asserts that <var>actual</var> input {@link Collections#matchesNoValues(Collection,
-     * Predicate) matches no values} of the
-     * <var>expected</var> {@link Predicate lambda}.
-     * <blockquote>{@value Collections#formatMatchesNoValues}</blockquote>
-     *
-     * @param fieldLabel The field's name to display as part of the diagnostic message. (Cannot be
-     * blank)
-     * @param actual The <var>actual</var> input to assert against the expectations.
-     * @param matcher The <var>expected</var> matcher to compare against.
-     * @param value Additional indicator value that corresponds to the potential failure. (May be
+     * @param values Additional indicator values that corresponds to the potential failure. (May be
      * null)
      * @return This non-null {@link Checker}.
      */
     public <T> Checker<S> ifMatchesNoValues(final String fieldLabel, final Collection<T> actual,
-        final Predicate<T> matcher, final S value) {
-      if (!Verifier.Collections.matchesNoValues(actual, matcher)) {
+        final Predicate<T> matcher, final S... values) {
+      if (Collections.matchesNoValues(actual, matcher)) {
         messages.add(
             MessageFormat.format(Collections.formatMatchesNoValues, className, fieldLabel, actual));
-        if (value != null) {
-          values.add(value);
-        }
+        addValues(values);
       }
 
       return this;
@@ -763,30 +474,14 @@ public class Verifier {
      * @param fieldLabel The field's name to display as part of the diagnostic message. (Cannot be
      * blank)
      * @param actual The <var>actual</var> input to assert against the expectations.
-     * @return This non-null {@link Checker}.
-     */
-    public Checker<S> ifNotBlank(final String fieldLabel, final String actual) {
-      return ifNotBlank(fieldLabel, actual, null);
-    }
-
-    /**
-     * Asserts that <var>actual</var> input {@link Strings#isBlank is not blank}, i.e. is neither
-     * null, empty, nor contains only whitespace.
-     * <blockquote>{@value Strings#formatNotBlank}</blockquote>
-     *
-     * @param fieldLabel The field's name to display as part of the diagnostic message. (Cannot be
-     * blank)
-     * @param actual The <var>actual</var> input to assert against the expectations.
-     * @param value Additional indicator value that corresponds to the potential failure. (May be
+     * @param values Additional indicator values that corresponds to the potential failure. (May be
      * null)
      * @return This non-null {@link Checker}.
      */
-    public Checker<S> ifNotBlank(final String fieldLabel, final String actual, final S value) {
-      if (Verifier.Strings.isBlank.test(actual)) {
+    public Checker<S> ifNotBlank(final String fieldLabel, final String actual, final S... values) {
+      if (!Strings.isBlank.test(actual)) {
         messages.add(MessageFormat.format(Strings.formatNotBlank, className, fieldLabel));
-        if (value != null) {
-          values.add(value);
-        }
+        addValues(values);
       }
 
       return this;
@@ -800,30 +495,14 @@ public class Verifier {
      * @param fieldLabel The field's name to display as part of the diagnostic message. (Cannot be
      * blank)
      * @param actual The <var>actual</var> input to assert against the expectations.
-     * @return This non-null {@link Checker}.
-     */
-    public Checker<S> ifNotEmpty(final String fieldLabel, final String actual) {
-      return ifNotEmpty(fieldLabel, actual, null);
-    }
-
-    /**
-     * Asserts that <var>actual</var> input {@link Strings#isEmpty is not blank}, i.e. is neither
-     * null, nor empty.
-     * <blockquote>{@value Strings#formatNotEmpty}</blockquote>
-     *
-     * @param fieldLabel The field's name to display as part of the diagnostic message. (Cannot be
-     * blank)
-     * @param actual The <var>actual</var> input to assert against the expectations.
-     * @param value Additional indicator value that corresponds to the potential failure. (May be
+     * @param values Additional indicator values that corresponds to the potential failure. (May be
      * null)
      * @return This non-null {@link Checker}.
      */
-    public Checker<S> ifNotEmpty(final String fieldLabel, final String actual, final S value) {
-      if (Verifier.Strings.isEmpty.test(actual)) {
+    public Checker<S> ifNotEmpty(final String fieldLabel, final String actual, final S... values) {
+      if (!Strings.isEmpty.test(actual)) {
         messages.add(MessageFormat.format(Strings.formatNotEmpty, className, fieldLabel));
-        if (value != null) {
-          values.add(value);
-        }
+        addValues(values);
       }
 
       return this;
@@ -836,33 +515,17 @@ public class Verifier {
      * @param fieldLabel The field's name to display as part of the diagnostic message. (Cannot be
      * blank)
      * @param actual The <var>actual</var> input to assert against the expectations.
-     * @param <T> The type of {@link Collection} to check.
-     * @return This non-null {@link Checker}.
-     */
-    public <T> Checker<S> ifNotEmpty(final String fieldLabel, final Collection<T> actual) {
-      return ifNotEmpty(fieldLabel, actual, null);
-    }
-
-    /**
-     * Asserts that <var>actual</var> input {@link Collections#isEmpty is not empty}.
-     * <blockquote>{@value Collections#formatNotEmptyCollection}</blockquote>
-     *
-     * @param fieldLabel The field's name to display as part of the diagnostic message. (Cannot be
-     * blank)
-     * @param actual The <var>actual</var> input to assert against the expectations.
-     * @param value Additional indicator value that corresponds to the potential failure. (May be
+     * @param values Additional indicator values that corresponds to the potential failure. (May be
      * null)
      * @param <T> The type of {@link Collection} to check.
      * @return This non-null {@link Checker}.
      */
     public <T> Checker<S> ifNotEmpty(final String fieldLabel, final Collection<T> actual,
-        final S value) {
-      if (Verifier.Collections.isEmpty.test(actual)) {
+        final S... values) {
+      if (!Collections.isEmpty.test(actual)) {
         messages
             .add(MessageFormat.format(Collections.formatNotEmptyCollection, className, fieldLabel));
-        if (value != null) {
-          values.add(value);
-        }
+        addValues(values);
       }
 
       return this;
@@ -877,34 +540,16 @@ public class Verifier {
      * blank)
      * @param actual The <var>actual</var> input to assert against the expectations.
      * @param expected The <var>expected</var> value to compare against.
-     * @return This non-null {@link Checker}.
-     */
-    public Checker<S> ifNotEqual(final String fieldLabel, final String actual,
-        final String expected, final boolean caseSensitive) {
-      return ifNotEqual(fieldLabel, actual, expected, caseSensitive, null);
-    }
-
-    /**
-     * Asserts that <var>actual</var> input {@link Equality#isEqualString is not equal to} the
-     * <var>expected</var> input.
-     * <blockquote>{@value Equality#formatNotEqualString}</blockquote>
-     *
-     * @param fieldLabel The field's name to display as part of the diagnostic message. (Cannot be
-     * blank)
-     * @param actual The <var>actual</var> input to assert against the expectations.
-     * @param expected The <var>expected</var> value to compare against.
-     * @param value Additional indicator value that corresponds to the potential failure. (May be
+     * @param values Additional indicator values that corresponds to the potential failure. (May be
      * null)
      * @return This non-null {@link Checker}.
      */
     public Checker<S> ifNotEqual(final String fieldLabel, final String actual,
-        final String expected, final boolean caseSensitive, final S value) {
-      if (Equality.isEqualString(actual, expected, caseSensitive)) {
+        final String expected, final boolean caseSensitive, final S... values) {
+      if (!Equality.isEqualString(actual, expected, caseSensitive)) {
         messages.add(MessageFormat
             .format(Equality.formatNotEqualString, className, fieldLabel, actual, expected));
-        if (value != null) {
-          values.add(value);
-        }
+        addValues(values);
       }
 
       return this;
@@ -919,34 +564,16 @@ public class Verifier {
      * blank)
      * @param actual The <var>actual</var> input to assert against the expectations.
      * @param expected The <var>expected</var> value to compare against.
-     * @return This non-null {@link Checker}.
-     */
-    public <T> Checker<S> ifNotEqual(final String fieldLabel, final Collection<T> actual,
-        final Collection<T> expected) {
-      return ifNotEqual(fieldLabel, actual, expected, null);
-    }
-
-    /**
-     * Asserts that <var>actual</var> input {@link Equality#isEqualCollection is not equal to} the
-     * <var>expected</var> input.
-     * <blockquote>{@value Equality#formatNotEqual}</blockquote>
-     *
-     * @param fieldLabel The field's name to display as part of the diagnostic message. (Cannot be
-     * blank)
-     * @param actual The <var>actual</var> input to assert against the expectations.
-     * @param expected The <var>expected</var> value to compare against.
-     * @param value Additional indicator value that corresponds to the potential failure. (May be
+     * @param values Additional indicator values that corresponds to the potential failure. (May be
      * null)
      * @return This non-null {@link Checker}.
      */
     public <T> Checker<S> ifNotEqual(final String fieldLabel, final Collection<T> actual,
-        final Collection<T> expected, final S value) {
-      if (Equality.isEqualCollection(actual, expected)) {
+        final Collection<T> expected, final S... values) {
+      if (!Equality.isEqualCollection(actual, expected)) {
         messages.add(
             MessageFormat.format(Equality.formatNotEqual, className, fieldLabel, actual, expected));
-        if (value != null) {
-          values.add(value);
-        }
+        addValues(values);
       }
 
       return this;
@@ -961,33 +588,16 @@ public class Verifier {
      * blank)
      * @param actual The <var>actual</var> input to assert against the expectations.
      * @param expected The <var>expected</var> value to compare against.
-     * @return This non-null {@link Checker}.
-     */
-    public <T> Checker<S> ifNotEqual(final String fieldLabel, final T actual, final T expected) {
-      return ifNotEqual(fieldLabel, actual, expected, null);
-    }
-
-    /**
-     * Asserts that <var>actual</var> input {@link Equality#isEqualObject is not equal to} the
-     * <var>expected</var> input.
-     * <blockquote>{@value Equality#formatNotEqual}</blockquote>
-     *
-     * @param fieldLabel The field's name to display as part of the diagnostic message. (Cannot be
-     * blank)
-     * @param actual The <var>actual</var> input to assert against the expectations.
-     * @param expected The <var>expected</var> value to compare against.
-     * @param value Additional indicator value that corresponds to the potential failure. (May be
+     * @param values Additional indicator values that corresponds to the potential failure. (May be
      * null)
      * @return This non-null {@link Checker}.
      */
     public <T> Checker<S> ifNotEqual(final String fieldLabel, final T actual, final T expected,
-        final S value) {
-      if (Equality.isEqualObject(actual, expected)) {
+        final S... values) {
+      if (!Equality.isEqualObject(actual, expected)) {
         messages.add(
             MessageFormat.format(Equality.formatNotEqual, className, fieldLabel, actual, expected));
-        if (value != null) {
-          values.add(value);
-        }
+        addValues(values);
       }
 
       return this;
@@ -1005,38 +615,17 @@ public class Verifier {
      * @param expected The <var>expected</var> value to compare against.
      * @param tolerance The allowed tolerance between <var>actual</var> and <var>expected</var> in
      * seconds. (Must be positive)
-     * @return This non-null {@link Checker}.
-     */
-    public Checker<S> ifNotEqualDate(final String fieldLabel, final Instant actual,
-        final Instant expected, final long tolerance) {
-      return ifNotEqualDate(fieldLabel, actual, expected, tolerance, null);
-    }
-
-    /**
-     * Asserts that <var>actual</var> input {@link Equality#isEqualDateWithTolerance(Instant,
-     * Instant, long) is not equal to} the
-     * <var>expected</var> within the provided <var>tolerance</var>.
-     * <blockquote>{@value Equality#formatNotEqualDateWithTolerance}</blockquote>
-     *
-     * @param fieldLabel The field's name to display as part of the diagnostic message. (Cannot be
-     * blank)
-     * @param actual The <var>actual1</var> input to assert against the expectations.
-     * @param expected The <var>expected</var> value to compare against.
-     * @param tolerance The allowed tolerance between <var>actual</var> and <var>expected</var> in
-     * seconds. (Must be positive)
-     * @param value Additional indicator value that corresponds to the potential failure. (May be
+     * @param values Additional indicator values that corresponds to the potential failure. (May be
      * null)
      * @return This non-null {@link Checker}.
      */
     public Checker<S> ifNotEqualDate(final String fieldLabel, final Instant actual,
-        final Instant expected, final long tolerance, final S value) {
-      if (Verifier.Equality.isEqualDateWithTolerance(actual, expected, tolerance)) {
+        final Instant expected, final long tolerance, final S... values) {
+      if (!Equality.isEqualDateWithTolerance(actual, expected, tolerance)) {
         messages.add(MessageFormat
             .format(Equality.formatNotEqualDateWithTolerance, className, fieldLabel, actual,
                 expected, tolerance));
-        if (value != null) {
-          values.add(value);
-        }
+        addValues(values);
       }
 
       return this;
@@ -1054,26 +643,7 @@ public class Verifier {
      * @param expected The <var>expected</var> value to compare against.
      * @param tolerance The allowed tolerance between <var>actual</var> and <var>expected</var> in
      * seconds. (Must be positive)
-     * @return This non-null {@link Checker}.
-     */
-    public Checker<S> ifNotEqualDate(final String fieldLabel, final LocalDateTime actual,
-        final LocalDateTime expected, final long tolerance) {
-      return ifNotEqualDate(fieldLabel, actual, expected, tolerance, null);
-    }
-
-    /**
-     * Asserts that <var>actual</var> input {@link Equality#isEqualDateWithTolerance(LocalDateTime,
-     * LocalDateTime, long) is not equal to} the
-     * <var>expected</var> within the provided <var>tolerance</var>.
-     * <blockquote>{@value Equality#formatNotEqualDateWithTolerance}</blockquote>
-     *
-     * @param fieldLabel The field's name to display as part of the diagnostic message. (Cannot be
-     * blank)
-     * @param actual The <var>actual1</var> input to assert against the expectations.
-     * @param expected The <var>expected</var> value to compare against.
-     * @param tolerance The allowed tolerance between <var>actual</var> and <var>expected</var> in
-     * seconds. (Must be positive)
-     * @param value Additional indicator value that corresponds to the potential failure. (May be
+     * @param values Additional indicator values that corresponds to the potential failure. (May be
      * null)
      * @return This non-null {@link Checker}.
      */
@@ -1081,14 +651,12 @@ public class Verifier {
         final LocalDateTime actual,
         final LocalDateTime expected,
         final long tolerance,
-        final S value) {
-      if (Verifier.Equality.isEqualDateWithTolerance(actual, expected, tolerance)) {
+        final S... values) {
+      if (!Equality.isEqualDateWithTolerance(actual, expected, tolerance)) {
         messages.add(MessageFormat
             .format(Equality.formatNotEqualDateWithTolerance, className, fieldLabel, actual,
                 expected, tolerance));
-        if (value != null) {
-          values.add(value);
-        }
+        addValues(values);
       }
 
       return this;
@@ -1103,38 +671,17 @@ public class Verifier {
      * blank)
      * @param actual The <var>actual</var> input to assert against the expectations.
      * @param expected The <var>expected</var> value to compare against.
+     * @param values Additional indicator values that corresponds to the potential failure. (May be
+     * null)
      * @return This non-null {@link Checker}.
      */
     public Checker<S> ifNotEqualWithError(final String fieldLabel, final double actual,
-        final double expected, final double epsilon) {
-      return ifNotEqualWithError(fieldLabel, actual, expected, epsilon, null);
-    }
-
-    /**
-     * Asserts that <var>actual</var> input {@link Equality#isEqualWithError is not equal to} the
-     * <var>expected</var> input.
-     * <blockquote>{@value Equality#formatNotEqualWithError}</blockquote>
-     *
-     * @param fieldLabel The field's name to display as part of the diagnostic message. (Cannot be
-     * blank)
-     * @param actual The <var>actual</var> input to assert against the expectations.
-     * @param expected The <var>expected</var> value to compare against.
-     * @param value Additional indicator value that corresponds to the potential failure. (May be
-     * null)
-     * @return This non-null {@link Checker}.
-     */
-    public Checker<S> ifNotEqualWithError(final String fieldLabel,
-        final double actual,
-        final double expected,
-        final double epsilon,
-        final S value) {
-      if (Equality.isEqualWithError(actual, expected, epsilon)) {
+        final double expected, final double epsilon, final S... values) {
+      if (!Equality.isEqualWithError(actual, expected, epsilon)) {
         messages.add(MessageFormat
             .format(Equality.formatNotEqualWithError, className, fieldLabel, actual, expected,
                 epsilon));
-        if (value != null) {
-          values.add(value);
-        }
+        addValues(values);
       }
 
       return this;
@@ -1150,35 +697,16 @@ public class Verifier {
      * blank)
      * @param actual The <var>actual</var> input to assert against the expectations.
      * @param pattern The regular expression <var>pattern</var> value to compare against.
-     * @return This non-null {@link Checker}.
-     */
-    public Checker<S> ifNotMatches(final String fieldLabel, final String actual,
-        final String pattern) {
-      return ifNotMatches(fieldLabel, actual, pattern, null);
-    }
-
-    /**
-     * Asserts that <var>actual</var> input {@link Strings#matches does not match} the regular
-     * expression
-     * <var>pattern</var> input.
-     * <blockquote>{@value Strings#formatNotMatches}</blockquote>
-     *
-     * @param fieldLabel The field's name to display as part of the diagnostic message. (Cannot be
-     * blank)
-     * @param actual The <var>actual</var> input to assert against the expectations.
-     * @param pattern The regular expression <var>pattern</var> value to compare against.
-     * @param value Additional indicator value that corresponds to the potential failure. (May be
+     * @param values Additional indicator values that corresponds to the potential failure. (May be
      * null)
      * @return This non-null {@link Checker}.
      */
     public Checker<S> ifNotMatches(final String fieldLabel, final String actual,
-        final String pattern, final S value) {
-      if (Strings.matches.test(actual, pattern)) {
+        final String pattern, final S... values) {
+      if (!Strings.matches.test(actual, pattern)) {
         messages.add(
             MessageFormat.format(Strings.formatNotMatches, className, fieldLabel, actual, pattern));
-        if (value != null) {
-          values.add(value);
-        }
+        addValues(values);
       }
 
       return this;
@@ -1191,29 +719,14 @@ public class Verifier {
      * @param fieldLabel The field's name to display as part of the diagnostic message. (Cannot be
      * blank)
      * @param actual The <var>actual</var> input to assert against the expectations.
-     * @return This non-null {@link Checker}.
-     */
-    public <T> Checker<S> ifNotNull(final String fieldLabel, final T actual) {
-      return ifNotNull(fieldLabel, actual, null);
-    }
-
-    /**
-     * Asserts that <var>actual</var> input {@link #isNull is not null}.
-     * <blockquote>{@value #formatNotNull}</blockquote>
-     *
-     * @param fieldLabel The field's name to display as part of the diagnostic message. (Cannot be
-     * blank)
-     * @param actual The <var>actual</var> input to assert against the expectations.
-     * @param value Additional indicator value that corresponds to the potential failure. (May be
+     * @param values Additional indicator values that corresponds to the potential failure. (May be
      * null)
      * @return This non-null {@link Checker}.
      */
-    public <T> Checker<S> ifNotNull(final String fieldLabel, final T actual, final S value) {
-      if (Verifier.isNull.test(actual)) {
+    public <T> Checker<S> ifNotNull(final String fieldLabel, final T actual, final S... values) {
+      if (!isNull.test(actual)) {
         messages.add(MessageFormat.format(formatNotNull, className, fieldLabel));
-        if (value != null) {
-          values.add(value);
-        }
+        addValues(values);
       }
 
       return this;
@@ -1228,38 +741,17 @@ public class Verifier {
      * blank)
      * @param actual The <var>actual</var> input to assert against the expectations.
      * @param maxLength The <var>maxLength</var> value to compare against.
-     * @return This non-null {@link Checker}.
-     */
-    public Checker<S> ifNotWithinMaxLength(final String fieldLabel, final String actual,
-        final int maxLength) {
-      return ifNotWithinMaxLength(fieldLabel, actual, maxLength, null);
-    }
-
-    /**
-     * Asserts that <var>actual</var> input {@link Strings#isWithinMaxLength is not within max
-     * character length} of the <var>maxLength</var> input.
-     * <blockquote>{@value Strings#formatIsNotWithinMaxLength}</blockquote>
-     *
-     * @param fieldLabel The field's name to display as part of the diagnostic message. (Cannot be
-     * blank)
-     * @param actual The <var>actual</var> input to assert against the expectations.
-     * @param maxLength The <var>maxLength</var> value to compare against.
-     * @param value Additional indicator value that corresponds to the potential failure. (May be
+     * @param values Additional indicator values that corresponds to the potential failure. (May be
      * null)
      * @return This non-null {@link Checker}.
      */
     public Checker<S> ifNotWithinMaxLength(final String fieldLabel, final String actual,
-        final int maxLength, final S value) {
-      if (Strings.isWithinMaxLength.test(actual, maxLength)) {
-        messages.add(MessageFormat.format(Strings.formatIsNotWithinMaxLength,
-            className,
-            fieldLabel,
-            actual,
-            actual != null ? actual.length() : 0,
-            maxLength));
-        if (value != null) {
-          values.add(value);
-        }
+        final int maxLength, final S... values) {
+      if (!Strings.isWithinMaxLength.test(actual, maxLength)) {
+        messages.add(MessageFormat
+            .format(Strings.formatIsNotWithinMaxLength, className, fieldLabel, actual,
+                actual != null ? actual.length() : 0, maxLength));
+        addValues(values);
       }
 
       return this;
@@ -1272,29 +764,14 @@ public class Verifier {
      * @param fieldLabel The field's name to display as part of the diagnostic message. (Cannot be
      * blank)
      * @param actual The <var>actual</var> input to assert against the expectations.
-     * @return This non-null {@link Checker}.
-     */
-    public <T> Checker<S> ifNull(final String fieldLabel, final T actual) {
-      return ifNull(fieldLabel, actual, null);
-    }
-
-    /**
-     * Asserts that <var>actual</var> input {@link #isNull is null}.
-     * <blockquote>{@value #formatNull}</blockquote>
-     *
-     * @param fieldLabel The field's name to display as part of the diagnostic message. (Cannot be
-     * blank)
-     * @param actual The <var>actual</var> input to assert against the expectations.
-     * @param value Additional indicator value that corresponds to the potential failure. (May be
+     * @param values Additional indicator values that corresponds to the potential failure. (May be
      * null)
      * @return This non-null {@link Checker}.
      */
-    public <T> Checker<S> ifNull(final String fieldLabel, final T actual, final S value) {
-      if (Verifier.isNull.negate().test(actual)) {
+    public <T> Checker<S> ifNull(final String fieldLabel, final T actual, final S... values) {
+      if (isNull.test(actual)) {
         messages.add(MessageFormat.format(formatNull, className, fieldLabel));
-        if (value != null) {
-          values.add(value);
-        }
+        addValues(values);
       }
 
       return this;
@@ -1311,35 +788,15 @@ public class Verifier {
      * @param field2Label The field's name to display as part of the diagnostic message. (Cannot be
      * blank)
      * @param actual2 The <var>actual2</var> input to assert against the expectations.
-     * @return This non-null {@link Checker}.
-     */
-    public <T, U> Checker<S> ifOrNotNull(final String field1Label, final T actual1,
-        final String field2Label, final U actual2) {
-      return ifOrNotNull(field1Label, actual1, field2Label, actual2, null);
-    }
-
-    /**
-     * Asserts that neither <var>actual1</var> input nor <var>actual2</var> input {@link
-     * #isOrNotNull are null}.
-     * <blockquote>{@value #formatOrNotNull}</blockquote>
-     *
-     * @param field1Label The field's name to display as part of the diagnostic message. (Cannot be
-     * blank)
-     * @param actual1 The <var>actual1</var> input to assert against the expectations.
-     * @param field2Label The field's name to display as part of the diagnostic message. (Cannot be
-     * blank)
-     * @param actual2 The <var>actual2</var> input to assert against the expectations.
-     * @param value Additional indicator value that corresponds to the potential failure. (May be
+     * @param values Additional indicator values that corresponds to the potential failure. (May be
      * null)
      * @return This non-null {@link Checker}.
      */
     public <T, U> Checker<S> ifOrNotNull(final String field1Label, final T actual1,
-        final String field2Label, final U actual2, final S value) {
-      if (Verifier.isOrNotNull.negate().test(actual1, actual2)) {
+        final String field2Label, final U actual2, final S... values) {
+      if (isOrNotNull.test(actual1, actual2)) {
         messages.add(MessageFormat.format(formatOrNotNull, className, field1Label, field2Label));
-        if (value != null) {
-          values.add(value);
-        }
+        addValues(values);
       }
 
       return this;
@@ -1356,35 +813,15 @@ public class Verifier {
      * @param field2Label The field's name to display as part of the diagnostic message. (Cannot be
      * blank)
      * @param actual2 The <var>actual2</var> input to assert against the expectations.
-     * @return This non-null {@link Checker}.
-     */
-    public <T, U> Checker<S> ifOrNull(final String field1Label, final T actual1,
-        final String field2Label, final U actual2) {
-      return ifOrNull(field1Label, actual1, field2Label, actual2, null);
-    }
-
-    /**
-     * Asserts that either <var>actual1</var> input or <var>actual2</var> input {@link #isOrNull are
-     * null}.
-     * <blockquote>{@value #formatOrNull}</blockquote>
-     *
-     * @param field1Label The field's name to display as part of the diagnostic message. (Cannot be
-     * blank)
-     * @param actual1 The <var>actual1</var> input to assert against the expectations.
-     * @param field2Label The field's name to display as part of the diagnostic message. (Cannot be
-     * blank)
-     * @param actual2 The <var>actual2</var> input to assert against the expectations.
-     * @param value Additional indicator value that corresponds to the potential failure. (May be
+     * @param values Additional indicator values that corresponds to the potential failure. (May be
      * null)
      * @return This non-null {@link Checker}.
      */
     public <T, U> Checker<S> ifOrNull(final String field1Label, final T actual1,
-        final String field2Label, final U actual2, final S value) {
-      if (Verifier.isOrNull.negate().test(actual1, actual2)) {
+        final String field2Label, final U actual2, final S... values) {
+      if (isOrNull.test(actual1, actual2)) {
         messages.add(MessageFormat.format(formatOrNull, className, field1Label, field2Label));
-        if (value != null) {
-          values.add(value);
-        }
+        addValues(values);
       }
 
       return this;
@@ -1400,39 +837,17 @@ public class Verifier {
      * blank)
      * @param actual The <var>actual</var> input to assert against the expectations.
      * @param maxLength The <var>maxLength</var> value to compare against.
-     * @return This non-null {@link Checker}.
-     */
-    public Checker<S> ifWithinMaxLength(final String fieldLabel, final String actual,
-        final int maxLength) {
-      return ifWithinMaxLength(fieldLabel, actual, maxLength, null);
-    }
-
-    /**
-     * Asserts that <var>actual</var> input {@link Strings#isWithinMaxLength is within max character
-     * length} of the
-     * <var>maxLength</var> input.
-     * <blockquote>{@value Strings#formatIsWithinMaxLength}</blockquote>
-     *
-     * @param fieldLabel The field's name to display as part of the diagnostic message. (Cannot be
-     * blank)
-     * @param actual The <var>actual</var> input to assert against the expectations.
-     * @param maxLength The <var>maxLength</var> value to compare against.
-     * @param value Additional indicator value that corresponds to the potential failure. (May be
+     * @param values Additional indicator values that corresponds to the potential failure. (May be
      * null)
      * @return This non-null {@link Checker}.
      */
     public Checker<S> ifWithinMaxLength(final String fieldLabel, final String actual,
-        final int maxLength, final S value) {
-      if (Strings.isWithinMaxLength.negate().test(actual, maxLength)) {
-        messages.add(MessageFormat.format(Strings.formatIsWithinMaxLength,
-            className,
-            fieldLabel,
-            actual,
-            actual != null ? actual.length() : 0,
-            maxLength));
-        if (value != null) {
-          values.add(value);
-        }
+        final int maxLength, final S... values) {
+      if (Strings.isWithinMaxLength.test(actual, maxLength)) {
+        messages.add(MessageFormat
+            .format(Strings.formatIsWithinMaxLength, className, fieldLabel, actual,
+                actual != null ? actual.length() : 0, maxLength));
+        addValues(values);
       }
 
       return this;
@@ -1449,35 +864,15 @@ public class Verifier {
      * @param field2Label The field's name to display as part of the diagnostic message. (Cannot be
      * blank)
      * @param actual2 The <var>actual2</var> input to assert against the expectations.
-     * @return This non-null {@link Checker}.
-     */
-    public <T, U> Checker<S> ifNotXorNull(final String field1Label, final T actual1,
-        final String field2Label, final U actual2) {
-      return ifNotXorNull(field1Label, actual1, field2Label, actual2, null);
-    }
-
-    /**
-     * Asserts that either <var>actual1</var> input and <var>actual2</var> input {@link #isXorNull
-     * are null} or neither are null.
-     * <blockquote>{@value #formatNotXorNull}</blockquote>
-     *
-     * @param field1Label The field's name to display as part of the diagnostic message. (Cannot be
-     * blank)
-     * @param actual1 The <var>actual1</var> input to assert against the expectations.
-     * @param field2Label The field's name to display as part of the diagnostic message. (Cannot be
-     * blank)
-     * @param actual2 The <var>actual2</var> input to assert against the expectations.
-     * @param value Additional indicator value that corresponds to the potential failure. (May be
+     * @param values Additional indicator values that corresponds to the potential failure. (May be
      * null)
      * @return This non-null {@link Checker}.
      */
     public <T, U> Checker<S> ifNotXorNull(final String field1Label, final T actual1,
-        final String field2Label, final U actual2, final S value) {
-      if (Verifier.isXorNull.test(actual1, actual2)) {
+        final String field2Label, final U actual2, final S... values) {
+      if (!isXorNull.test(actual1, actual2)) {
         messages.add(MessageFormat.format(formatNotXorNull, className, field1Label, field2Label));
-        if (value != null) {
-          values.add(value);
-        }
+        addValues(values);
       }
 
       return this;
@@ -1494,35 +889,15 @@ public class Verifier {
      * @param field2Label The field's name to display as part of the diagnostic message. (Cannot be
      * blank)
      * @param actual2 The <var>actual2</var> input to assert against the expectations.
-     * @return This non-null {@link Checker}.
-     */
-    public <T, U> Checker<S> ifXorNull(final String field1Label, final T actual1,
-        final String field2Label, final U actual2) {
-      return ifXorNull(field1Label, actual1, field2Label, actual2, null);
-    }
-
-    /**
-     * Asserts that either <var>actual1</var> input or <var>actual2</var> input are {@link
-     * #isXorNull null} but not both.
-     * <blockquote>{@value #formatXorNull}</blockquote>
-     *
-     * @param field1Label The field's name to display as part of the diagnostic message. (Cannot be
-     * blank)
-     * @param actual1 The <var>actual1</var> input to assert against the expectations.
-     * @param field2Label The field's name to display as part of the diagnostic message. (Cannot be
-     * blank)
-     * @param actual2 The <var>actual2</var> input to assert against the expectations.
-     * @param value Additional indicator value that corresponds to the potential failure. (May be
+     * @param values Additional indicator values that corresponds to the potential failure. (May be
      * null)
      * @return This non-null {@link Checker}.
      */
     public <T, U> Checker<S> ifXorNull(final String field1Label, final T actual1,
-        final String field2Label, final U actual2, final S value) {
-      if (Verifier.isXorNull.negate().test(actual1, actual2)) {
+        final String field2Label, final U actual2, final S... values) {
+      if (isXorNull.test(actual1, actual2)) {
         messages.add(MessageFormat.format(formatXorNull, className, field1Label, field2Label));
-        if (value != null) {
-          values.add(value);
-        }
+        addValues(values);
       }
 
       return this;
